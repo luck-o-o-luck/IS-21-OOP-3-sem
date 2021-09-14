@@ -28,7 +28,7 @@ namespace Isu.Models
                 _groups.Add(studentsGroup);
         }
 
-        public List<Group> GetGroupsFromCourse() => this._groups;
+        public IReadOnlyList<Group> GetGroupsFromCourse() => this._groups;
 
         public int GetCourseNumber() => this.Course;
     }
