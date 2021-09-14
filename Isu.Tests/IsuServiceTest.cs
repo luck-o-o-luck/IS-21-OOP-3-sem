@@ -21,9 +21,9 @@ namespace Isu.Tests
         {
             try
             {
-                var io = new IsuDataStore();
-                io.AddStudent(new Group("M3201"), "Васютинская Ксения");
-                io.Print();
+                _isuService = new IsuDataStore();
+                _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
+                _isuService.Print();
             }
             catch
             {
@@ -34,31 +34,31 @@ namespace Isu.Tests
         [Test]
         public void ReachMaxStudentPerGroup_ThrowException()
         {
-            Assert.Catch<IsuException>(() =>
+            _isuService = new IsuDataStore();
+            _isuService.AddStudent(new Group("M3201"), "Андреев Михаил");
+            _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
+            _isuService.AddStudent(new Group("M3201"), "Гайнутдинов Самат");
+            _isuService.AddStudent(new Group("M3201"), "Головин Максим");
+            _isuService.AddStudent(new Group("M3201"), "Григорович Вячеслав");
+            _isuService.AddStudent(new Group("M3201"), "Евтюхов Дмитрий");
+            _isuService.AddStudent(new Group("M3201"), "Иванов Никита");
+            _isuService.AddStudent(new Group("M3201"), "Корчагин Артём");
+            _isuService.AddStudent(new Group("M3201"), "Кудашев Искандер");
+            _isuService.AddStudent(new Group("M3201"), "Кулябин Денис");
+            _isuService.AddStudent(new Group("M3201"), "Либченко Михаил");
+            _isuService.AddStudent(new Group("M3201"), "Мамедов Мансур Солтан-Махмуд Оглы");
+            _isuService.AddStudent(new Group("M3201"), "Мирошниченко Александр");
+            _isuService.AddStudent(new Group("M3201"), "Муров Глеб");
+            _isuService.AddStudent(new Group("M3201"), "Перевощиков Радомир");
+            _isuService.AddStudent(new Group("M3201"), "Пискуровский Матвей");
+            _isuService.AddStudent(new Group("M3201"), "Сергеев Егор");
+            _isuService.AddStudent(new Group("M3201"), "Солдатов Константин");
+            _isuService.AddStudent(new Group("M3201"), "Сухов Владимир");
+            _isuService.AddStudent(new Group("M3201"), "Хакимов Руслан");
+            
+            Assert.Catch<IsuException>(()=>
             {
-                var io = new IsuDataStore();
-                io.AddStudent(new Group("M3201"), "Андреев Михаил");
-                io.AddStudent(new Group("M3201"), "Васютинская Ксения");
-                io.AddStudent(new Group("M3201"), "Гайнутдинов Самат");
-                io.AddStudent(new Group("M3201"), "Головин Максим");
-                io.AddStudent(new Group("M3201"), "Григорович Вячеслав");
-                io.AddStudent(new Group("M3201"), "Евтюхов Дмитрий");
-                io.AddStudent(new Group("M3201"), "Иванов Никита");
-                io.AddStudent(new Group("M3201"), "Корчагин Артём");
-                io.AddStudent(new Group("M3201"), "Кудашев Искандер");
-                io.AddStudent(new Group("M3201"), "Кулябин Денис");
-                io.AddStudent(new Group("M3201"), "Либченко Михаил");
-                io.AddStudent(new Group("M3201"), "Мамедов Мансур Солтан-Махмуд Оглы");
-                io.AddStudent(new Group("M3201"), "Мирошниченко Александр");
-                io.AddStudent(new Group("M3201"), "Муров Глеб");
-                io.AddStudent(new Group("M3201"), "Перевощиков Радомир");
-                io.AddStudent(new Group("M3201"), "Пискуровский Матвей");
-                io.AddStudent(new Group("M3201"), "Сергеев Егор");
-                io.AddStudent(new Group("M3201"), "Солдатов Константин");
-                io.AddStudent(new Group("M3201"), "Сухов Владимир");
-                io.AddStudent(new Group("M3201"), "Хакимов Руслан");
-                io.AddStudent(new Group("M3201"), "Халеев Михаил");
-                io.Print(); 
+                _isuService.AddStudent(new Group("M3201"), "Халеев Михаил");
             });
         }
 
@@ -67,8 +67,8 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                var io = new IsuDataStore();
-                io.AddGroup("M3607");
+                _isuService = new IsuDataStore();
+                _isuService.AddGroup("M3607");
             });
         }
 
@@ -77,9 +77,9 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                var io = new IsuDataStore();
-                io.AddStudent(new Group("M3201"), "Васютинская Ксения");
-                io.ChangeStudentGroup(io.FindStudent("Васютинская Ксения"), new Group("M3401"));
+                _isuService = new IsuDataStore();
+                _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
+                _isuService.ChangeStudentGroup(_isuService.FindStudent("Васютинская Ксения"), new Group("M3401"));
             });
         }
     }
