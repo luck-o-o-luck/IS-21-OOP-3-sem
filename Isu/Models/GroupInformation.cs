@@ -13,9 +13,7 @@ namespace Isu.Models
             CourseNumber = Convert.ToInt16(name.Substring(2, 1));
 
             if (CourseNumber < 1 || CourseNumber > 4)
-            {
                 throw new IsuException("The group can't be created");
-            }
         }
 
         public char Faculty { get; }
