@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Isu.Models;
 using Isu.Services;
 using Isu.Tools;
@@ -19,42 +21,23 @@ namespace Isu.Tests
         [Test]
         public void AddStudentToGroup_StudentHasGroupAndGroupContainsStudent()
         {
-            try
-            {
-                _isuService = new IsuDataStore();
-                _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
-                _isuService.Print();
-            }
-            catch
-            {
-                Assert.Fail();  
-            }
+            _isuService = new IsuDataStore();
+            _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
+            Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения").GroupIsu, _isuService.FindGroup("M3201"));
+            Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения"),
+                _isuService.FindGroup("M3201").StudentsFromGroup().Single(student => student.Name == "Васютинская Ксения"));
         }
 
         [Test]
         public void ReachMaxStudentPerGroup_ThrowException()
         {
             _isuService = new IsuDataStore();
-            _isuService.AddStudent(new Group("M3201"), "Андреев Михаил");
-            _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
-            _isuService.AddStudent(new Group("M3201"), "Гайнутдинов Самат");
-            _isuService.AddStudent(new Group("M3201"), "Головин Максим");
-            _isuService.AddStudent(new Group("M3201"), "Григорович Вячеслав");
-            _isuService.AddStudent(new Group("M3201"), "Евтюхов Дмитрий");
-            _isuService.AddStudent(new Group("M3201"), "Иванов Никита");
-            _isuService.AddStudent(new Group("M3201"), "Корчагин Артём");
-            _isuService.AddStudent(new Group("M3201"), "Кудашев Искандер");
-            _isuService.AddStudent(new Group("M3201"), "Кулябин Денис");
-            _isuService.AddStudent(new Group("M3201"), "Либченко Михаил");
-            _isuService.AddStudent(new Group("M3201"), "Мамедов Мансур Солтан-Махмуд Оглы");
-            _isuService.AddStudent(new Group("M3201"), "Мирошниченко Александр");
-            _isuService.AddStudent(new Group("M3201"), "Муров Глеб");
-            _isuService.AddStudent(new Group("M3201"), "Перевощиков Радомир");
-            _isuService.AddStudent(new Group("M3201"), "Пискуровский Матвей");
-            _isuService.AddStudent(new Group("M3201"), "Сергеев Егор");
-            _isuService.AddStudent(new Group("M3201"), "Солдатов Константин");
-            _isuService.AddStudent(new Group("M3201"), "Сухов Владимир");
-            _isuService.AddStudent(new Group("M3201"), "Хакимов Руслан");
+            _isuService.AddGroup("M3201");
+
+            for (int i = 0; i < _isuService.FindGroup("M3201").MaxCountStudents() ; i++)
+            {
+                _isuService.AddStudent(_isuService.FindGroup("M3201"), $"student{i + 1}");
+            }
             
             Assert.Catch<IsuException>(()=>
             {
