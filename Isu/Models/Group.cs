@@ -6,9 +6,14 @@ namespace Isu.Models
 {
     public class Group
     {
+        private const int LengthNameGroup = 5;
+        private const int MaxCountStudent = 20;
+
         private List<Student> _students;
         public Group(string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new IsuException("String is null or empty");
             if (name.Length != LengthNameGroup)
                 throw new IsuException("The group name is incorrect. The group can't be created");
 
@@ -17,16 +22,14 @@ namespace Isu.Models
             _students = new List<Student>();
         }
 
-        public int LengthNameGroup { get; } = 5;
         public string FullNameGroup { get; }
         public GroupInformation InformationAboutGroup { get; }
-        public int MaxCountStudent { get; } = 20;
-
         public void AddStudentsToGroup(Student student)
         {
             _students.Add(student);
         }
 
-        public IReadOnlyList<Student> GetStudentsFromGroup() => this._students;
+        public IReadOnlyList<Student> StudentsFromGroup() => this._students;
+        public int MaxCountStudents() => Group.MaxCountStudent;
     }
 }
