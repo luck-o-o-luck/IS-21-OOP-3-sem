@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime;
+using Isu.Tools;
 
 namespace Isu.Models
 {
@@ -7,6 +8,9 @@ namespace Isu.Models
     {
         public Student(string fullName, Group groupIsu, int id)
         {
+            if (string.IsNullOrWhiteSpace(fullName))
+                throw new IsuException("String is null or empty");
+
             Name = fullName;
             GroupIsu = groupIsu;
             Id = id;
