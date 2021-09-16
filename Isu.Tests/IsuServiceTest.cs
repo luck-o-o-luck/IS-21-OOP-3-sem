@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using Isu.Models;
 using Isu.Services;
 using Isu.Tools;
 using NUnit.Framework;
@@ -18,15 +21,27 @@ namespace Isu.Tests
         [Test]
         public void AddStudentToGroup_StudentHasGroupAndGroupContainsStudent()
         {
-            Assert.Fail();
+            _isuService = new IsuDataStore();
+            _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
+            Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения").GroupIsu, _isuService.FindGroup("M3201"));
+            Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения"),
+                _isuService.FindGroup("M3201").Students.Single(student => student.Name == "Васютинская Ксения"));
         }
 
         [Test]
         public void ReachMaxStudentPerGroup_ThrowException()
         {
-            Assert.Catch<IsuException>(() =>
+            _isuService = new IsuDataStore();
+            _isuService.AddGroup("M3201");
+
+            for (int i = 0; i < _isuService.FindGroup("M3201").MaxCountStudents ; i++)
             {
-                
+                _isuService.AddStudent(_isuService.FindGroup("M3201"), $"student{i + 1}");
+            }
+            
+            Assert.Catch<IsuException>(()=>
+            {
+                _isuService.AddStudent(new Group("M3201"), "Халеев Михаил");
             });
         }
 
@@ -35,7 +50,8 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-
+                _isuService = new IsuDataStore();
+                _isuService.AddGroup("M3607");
             });
         }
 
@@ -44,7 +60,9 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-
+                _isuService = new IsuDataStore();
+                _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
+                _isuService.ChangeStudentGroup(_isuService.FindStudent("Васютинская Ксения"), new Group("M3401"));
             });
         }
     }
