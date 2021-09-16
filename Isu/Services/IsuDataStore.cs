@@ -116,7 +116,7 @@ namespace Isu.Services
             return selectedGroup.Students;
         }
 
-        public IEnumerable<Student> FindStudents(CourseNumber courseNumber)
+        public IReadOnlyList<Student> FindStudents(CourseNumber courseNumber)
         {
             if (!CourseExists(courseNumber.Course))
                 throw new IsuException("The course doesn't exists");
@@ -125,7 +125,7 @@ namespace Isu.Services
                 .Single(course => course.Course == courseNumber.Course)
                 .GroupsFromCourse;
 
-            IEnumerable<Student> selectedStudents = selectedGroups.SelectMany(group => @group.Students);
+            IReadOnlyList<Student> selectedStudents = selectedGroups.SelectMany(group => @group.Students).ToList();
 
             if (!selectedStudents.Any())
                 throw new IsuException("The students doesn't exists");
