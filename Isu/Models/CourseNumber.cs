@@ -24,12 +24,12 @@ namespace Isu.Models
 
         public void AddGroupToCourse(Group studentsGroup)
         {
-            if (!_groups.Any(group => group == studentsGroup))
+            if (_groups.All(group => @group.FullNameGroup != studentsGroup.FullNameGroup))
                 _groups.Add(studentsGroup);
         }
 
-        public IReadOnlyList<Group> GetGroupsFromCourse() => this._groups;
+        public IReadOnlyList<Group> GroupsFromCourse() => _groups;
 
-        public int GetCourseNumber() => this.Course;
+        public int Number() => Course;
     }
 }
