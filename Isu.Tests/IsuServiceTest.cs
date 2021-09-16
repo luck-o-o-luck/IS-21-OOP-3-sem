@@ -25,7 +25,7 @@ namespace Isu.Tests
             _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
             Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения").GroupIsu, _isuService.FindGroup("M3201"));
             Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения"),
-                _isuService.FindGroup("M3201").StudentsFromGroup().Single(student => student.Name == "Васютинская Ксения"));
+                _isuService.FindGroup("M3201").Students.Single(student => student.Name == "Васютинская Ксения"));
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace Isu.Tests
             _isuService = new IsuDataStore();
             _isuService.AddGroup("M3201");
 
-            for (int i = 0; i < _isuService.FindGroup("M3201").MaxCountStudents() ; i++)
+            for (int i = 0; i < _isuService.FindGroup("M3201").MaxCountStudents ; i++)
             {
                 _isuService.AddStudent(_isuService.FindGroup("M3201"), $"student{i + 1}");
             }

@@ -24,12 +24,11 @@ namespace Isu.Models
 
         public string FullNameGroup { get; }
         public GroupInformation InformationAboutGroup { get; }
+        public IReadOnlyList<Student> Students => _students;
+        public int MaxCountStudents => MaxCountStudent;
         public void AddStudentsToGroup(Student student)
         {
             _students.Add(student);
         }
-
-        public IReadOnlyList<Student> StudentsFromGroup() => this._students;
-        public int MaxCountStudents() => Group.MaxCountStudent;
     }
 }

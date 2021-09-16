@@ -15,7 +15,7 @@ namespace Isu.Services
         public void PrintGroup(Group group)
         {
             Console.WriteLine($"  Group number {group.InformationAboutGroup.GroupNumber}");
-            foreach (Student student in group.StudentsFromGroup())
+            foreach (Student student in group.Students)
             {
               PrintStudent(student);
             }
@@ -23,8 +23,8 @@ namespace Isu.Services
 
         public void PrintCourse(CourseNumber course)
         {
-            Console.WriteLine($"Course number {course.Number()}");
-            foreach (Group group in course.GroupsFromCourse())
+            Console.WriteLine($"Course number {course.Course}");
+            foreach (Group group in course.GroupsFromCourse)
             {
               PrintGroup(group);
             }

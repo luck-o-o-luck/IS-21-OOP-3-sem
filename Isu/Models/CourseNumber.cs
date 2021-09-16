@@ -20,16 +20,13 @@ namespace Isu.Models
             _groups.Add(groupIsu);
         }
 
-        private int Course { get; }
+        public int Course { get; }
+        public IReadOnlyList<Group> GroupsFromCourse => _groups;
 
         public void AddGroupToCourse(Group studentsGroup)
         {
             if (_groups.All(group => @group.FullNameGroup != studentsGroup.FullNameGroup))
                 _groups.Add(studentsGroup);
         }
-
-        public IReadOnlyList<Group> GroupsFromCourse() => _groups;
-
-        public int Number() => Course;
     }
 }

@@ -11,7 +11,7 @@ namespace Isu.Services
         Student GetStudent(int id);
         Student FindStudent(string name);
         IReadOnlyList<Student> FindStudents(string groupName);
-        IEnumerable<IReadOnlyList<Student>> FindStudents(CourseNumber courseNumber);
+        IEnumerable<Student> FindStudents(CourseNumber courseNumber);
 
         Group FindGroup(string groupName);
         IReadOnlyList<Group> FindGroups(CourseNumber courseNumber);
