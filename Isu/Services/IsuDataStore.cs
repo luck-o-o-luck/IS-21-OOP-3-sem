@@ -25,7 +25,7 @@ namespace Isu.Services
         public bool StudentExists(string name) => _students.Any(student => string.Equals(student.Name, name, StringComparison.CurrentCultureIgnoreCase));
         public bool StudentExistsById(int id) => _students.Any(student => student.Id == id);
         public bool GroupExists(string name) => _groups.Any(group => string.Equals(@group.FullNameGroup, name, StringComparison.CurrentCultureIgnoreCase));
-        public bool CourseExists(int courseNumber) => _courses.Any(course => course.GetCourseNumber() == courseNumber);
+        public bool CourseExists(int courseNumber) => _courses.Any(course => course.Number() == courseNumber);
 
         public Group AddGroup(string name)
         {
@@ -35,14 +35,14 @@ namespace Isu.Services
             var group = new Group(name);
             _groups.Add(group);
 
-            if (!CourseExists(Convert.ToInt16(name.Substring(2, 1))))
+            if (!CourseExists(short.Parse(name.Substring(2, 1))))
             {
-                _courses.Add(new CourseNumber(Convert.ToInt16(name.Substring(2, 1)), group));
+                _courses.Add(new CourseNumber(short.Parse(name.Substring(2, 1)), group));
             }
             else
             {
                 CourseNumber selectedCourse = _courses.Single(course =>
-                    course.GetCourseNumber() == group.InformationAboutGroup.CourseNumber);
+                    course.Number() == group.InformationAboutGroup.CourseNumber);
                 selectedCourse.AddGroupToCourse(group);
             }
 
@@ -57,7 +57,7 @@ namespace Isu.Services
             if (GroupExists(group.FullNameGroup))
                 group = _groups.Single(selectedGroup => selectedGroup.FullNameGroup == group.FullNameGroup);
 
-            if (group.GetStudentsFromGroup().Count == group.MaxCountStudent)
+            if (group.StudentsFromGroup().Count == group.MaxCountStudents())
                 throw new IsuException("The student can't be created. Check that the group is correct");
 
             var student = new Student(name, group, _studentId);
@@ -73,7 +73,7 @@ namespace Isu.Services
             else
             {
                 CourseNumber selectedCourse = _courses.Single(course =>
-                    course.GetCourseNumber() == group.InformationAboutGroup.CourseNumber);
+                    course.Number() == group.InformationAboutGroup.CourseNumber);
                 selectedCourse.AddGroupToCourse(group);
             }
 
@@ -110,29 +110,27 @@ namespace Isu.Services
 
             Group selectedGroup = _groups.Single(group => group.FullNameGroup.ToLower() == groupName.ToLower());
 
-            if (selectedGroup.GetStudentsFromGroup().Count > 0)
-                return selectedGroup.GetStudentsFromGroup();
-            else
+            if (selectedGroup.StudentsFromGroup().Count == 0)
                 throw new IsuException("Students from group doesn't exists");
+
+            return selectedGroup.StudentsFromGroup();
         }
 
-        public IReadOnlyList<Student> FindStudents(CourseNumber courseNumber)
+        public IEnumerable<IReadOnlyList<Student>> FindStudents(CourseNumber courseNumber)
         {
-            if (!CourseExists(courseNumber.GetCourseNumber()))
+            if (!CourseExists(courseNumber.Number()))
                 throw new IsuException("The course doesn't exists");
 
-            var selectedStudents = new List<Student>();
             IReadOnlyList<Group> selectedGroups = _courses
-                .Single(course => course.GetCourseNumber() == courseNumber.GetCourseNumber())
-                .GetGroupsFromCourse();
+                .Single(course => course.Number() == courseNumber.Number())
+                .GroupsFromCourse();
 
-            foreach (Group group in selectedGroups)
-                selectedStudents.AddRange(group.GetStudentsFromGroup());
+            IEnumerable<IReadOnlyList<Student>> selectedStudents = selectedGroups.Select(group => @group.StudentsFromGroup());
 
-            if (selectedStudents.Count > 0)
-                return selectedStudents;
-            else
+            if (!selectedStudents.Any())
                 throw new IsuException("The students doesn't exists");
+
+            return selectedStudents;
         }
 
         public Group FindGroup(string groupName)
@@ -148,8 +146,8 @@ namespace Isu.Services
         public IReadOnlyList<Group> FindGroups(CourseNumber courseNumber)
         {
             IReadOnlyList<Group> selectedGroups = _courses
-                .Single(course => course.GetCourseNumber() == courseNumber.GetCourseNumber())
-                .GetGroupsFromCourse();
+                .Single(course => course.Number() == courseNumber.Number())
+                .GroupsFromCourse();
 
             return selectedGroups;
         }
