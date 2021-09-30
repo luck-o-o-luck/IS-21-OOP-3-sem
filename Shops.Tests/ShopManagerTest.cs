@@ -45,7 +45,7 @@ namespace Shops.Tests
         }
 
         [Test]
-        public void ShopWithCheapestPrice_ThrowExcepction()
+        public void ShopWithCheapestPrice_ShopIsCorrect()
         {
             _shopManager = new ShopManager();
             
