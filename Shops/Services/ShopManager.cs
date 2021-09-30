@@ -25,7 +25,7 @@ namespace Shops.Services
         public bool AdressExists(Adress adress) => _shops.Any(shop =>
             shop.Location.Street == adress.Street && shop.Location.NumberHouse == adress.NumberHouse);
 
-        public Customer AddCustomer(string name, int money)
+        public Customer AddCustomer(string name, decimal money)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ShopsException("Customer should has name");
@@ -122,7 +122,7 @@ namespace Shops.Services
             return _customers.Single(customer => customer.Name == name);
         }
 
-        public Product ChangePriceProduct(Shop shop, Product product, int newPrice)
+        public Product ChangePriceProduct(Shop shop, Product product, decimal newPrice)
         {
             if (product is null)
                 throw new ShopsException("Didn't enter the product");
