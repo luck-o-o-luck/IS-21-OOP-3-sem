@@ -29,10 +29,8 @@ namespace Shops.Models
             _products.Add(product);
         }
 
-        public void ChangeAmountMoney(decimal priceProducts)
+        public void DecreaseAmountMoney(decimal priceProducts)
         {
-            if (Money == 0)
-                throw new ShopsException("This customer has no money");
             if (Money < priceProducts)
                 throw new ShopsException("This customer can't buy this product");
 
