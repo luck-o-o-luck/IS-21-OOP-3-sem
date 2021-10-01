@@ -23,25 +23,25 @@ namespace Shops.Tests
         public void AddProductToShop_ShopHasProduct()
         {
             _shopManager = new ShopManager();
-            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
-            _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
-            Assert.AreEqual(_shopManager.FindShop(1).Products[0].ProductName, "Банан");
-            Assert.AreEqual(_shopManager.FindShop(1).Products[0].Price, 123);
-            Assert.AreEqual(_shopManager.FindShop(1).Products[0].Quantity, 12);
+            Shop shop1 = _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
+            _shopManager.AddShopsProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
+            Assert.AreEqual(shop1.Products[0].ProductName, "Банан");
+            Assert.AreEqual(shop1.Products[0].Price, 123);
+            Assert.AreEqual(shop1.Products[0].Quantity, 12);
         }
 
         [Test]
         public void AddProductToShop_ChangePriceProductInTheShop()
         {
             _shopManager = new ShopManager();
-            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
+            Shop shop1 = _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
             
-            _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
-            Assert.AreEqual(_shopManager.FindShop(1).Products[0].Price, 123);
+            _shopManager.AddShopsProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
+            Assert.AreEqual(shop1.Products[0].Price, 123);
             
-            _shopManager.ChangePriceProduct(_shopManager.FindShop(1), new Product("Банан"), 23);
+            _shopManager.ChangePriceProduct(shop1, new Product("Банан"), 23);
             
-            Assert.AreEqual(_shopManager.FindShop(1).Products[0].Price, 23);
+            Assert.AreEqual(shop1.Products[0].Price, 23);
         }
 
         [Test]
@@ -49,35 +49,35 @@ namespace Shops.Tests
         {
             _shopManager = new ShopManager();
             
-            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
-            _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
+            Shop shop1 = _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
+            _shopManager.AddShopsProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
             
-            _shopManager.AddShop("Пятерочка", new Address("большая Пушкарская", 12));
-            _shopManager.AddProduct(_shopManager.FindShop(2), new Product("Банан", 23, 12));
+            Shop shop2 = _shopManager.AddShop("Пятерочка", new Address("большая Пушкарская", 12));
+            _shopManager.AddShopsProduct(_shopManager.FindShop(2), new Product("Банан", 23, 12));
             
-            _shopManager.AddShop("Пятерочка", new Address("улица Саблинская", 11));
-            _shopManager.AddProduct(_shopManager.FindShop(3), new Product("Банан", 123, 12));
+            Shop shop3 = _shopManager.AddShop("Пятерочка", new Address("улица Саблинская", 11));
+            _shopManager.AddShopsProduct(_shopManager.FindShop(3), new Product("Банан", 123, 12));
 
             List<Product> products = new List<Product>();
             products.Add(new Product("Банан"));
 
-            Assert.AreEqual(_shopManager.FindShopWithCheapestProducts(products), _shopManager.FindShop(2));
+            Assert.AreEqual(_shopManager.FindShopWithCheapestProducts(products), shop2);
         }
 
         [Test]
         public void PurchaseOfProducts_TheNumberOfProductsAndMoneyHasChanged()
         {
             _shopManager = new ShopManager();
-            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
-            _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
+            Shop shop1 = _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
+            _shopManager.AddShopsProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
 
-            _shopManager.AddCustomer("Васютинская Ксения", 12345);
+            Customer customer = _shopManager.AddCustomer("Васютинская Ксения", 12345);
 
-            _shopManager.AddCustomersProduct(_shopManager.FindCustomer("Васютинская Ксения"), new Product("Банан", 2));
-            _shopManager.PurchaseGoods(_shopManager.FindShop(1), _shopManager.FindCustomer("Васютинская Ксения"));
+            _shopManager.AddCustomersProduct(customer, new Product("Банан", 2));
+            _shopManager.PurchaseGoods(shop1, customer);
             
-            Assert.AreEqual(_shopManager.FindShop(1).Products[0].Quantity, 10);
-            Assert.AreEqual(_shopManager.FindCustomer("Васютинская Ксения").Money, 12099);
+            Assert.AreEqual(shop1.Products[0].Quantity, 10);
+            Assert.AreEqual(customer.Money, 12099);
         }
         
     }
