@@ -8,6 +8,8 @@ namespace Shops.Models
         {
             if (string.IsNullOrEmpty(street))
                 throw new ShopsException("String is null or empty");
+            if (numberHouse < 1)
+                throw new ShopsException("Wrong number of house");
 
             Street = street;
             NumberHouse = numberHouse;
@@ -15,5 +17,20 @@ namespace Shops.Models
 
         public string Street { get; }
         public int NumberHouse { get; }
+
+        public override bool Equals(object obj)
+        {
+            var otherAddress = obj as Address;
+
+            if (otherAddress is null)
+                return false;
+
+            return otherAddress.Street == Street && otherAddress.NumberHouse == NumberHouse;
+        }
+
+        public override int GetHashCode()
+        {
+            return Street.Length + NumberHouse;
+        }
     }
 }
