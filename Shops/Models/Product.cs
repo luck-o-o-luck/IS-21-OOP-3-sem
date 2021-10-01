@@ -8,6 +8,10 @@ namespace Shops.Models
         {
             if (string.IsNullOrEmpty(name))
                 throw new ShopsException("String is null or empty");
+            if (price < 0)
+                throw new ShopsException("Price less than zero");
+            if (quantity < 0)
+                throw new ShopsException("Quantity less than zero");
 
             ProductName = name;
             Price = price;
@@ -18,6 +22,8 @@ namespace Shops.Models
         {
             if (string.IsNullOrEmpty(name))
                 throw new ShopsException("String is null or empty");
+            if (quantity < 0)
+                throw new ShopsException("Quantity less than zero");
 
             ProductName = name;
             Quantity = quantity;
