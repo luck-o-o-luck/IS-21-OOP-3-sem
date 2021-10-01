@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Shops.Tools;
 
 namespace Shops.Models
@@ -7,13 +8,13 @@ namespace Shops.Models
     {
         private List<Product> _products;
 
-        public Shop(string name, Address location, int id)
+        public Shop(string name, Address address, int id)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ShopsException("String is null or empty");
 
             ShopName = name;
-            Location = location;
+            Address = address;
             Id = id;
             _products = new List<Product>();
         }
@@ -26,6 +27,23 @@ namespace Shops.Models
         public void AddShopsProducts(Product product)
         {
             _products.Add(product);
+        }
+
+        public bool ContainsAllProduct(IReadOnlyList<Product> products)
+        {
+            if (products.Any(product => _products.All(x => x.ProductName != product.ProductName)))
+                return false;
+
+            return true;
+        }
+
+        public bool ContainsEnoughProducts(IReadOnlyList<Product> products)
+        {
+            if (products.Any(product =>
+                _products.All(x => x.ProductName != product.ProductName || x.Quantity < product.Quantity)))
+                return false;
+
+            return true;
         }
     }
 }
