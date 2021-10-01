@@ -19,18 +19,14 @@ namespace Shops.Services
             _shops = new List<Shop>();
         }
 
-        public bool CustomerNameExists(string name) => _customers.Any(customer => customer.Name == name);
         public bool ShopsProductExists(Shop shop, string name) => shop.Products.Any(product => product.ProductName == name);
         public bool CustomersProductExists(Customer customer, string name) => customer.Products.Any(product => product.ProductName == name);
-        public bool AddressExists(Address address) => _shops.Any(shop =>
-            shop.Location.Street == address.Street && shop.Location.NumberHouse == address.NumberHouse);
+        public bool AddressExists(Address address) => _shops.Any(shop => shop.Address.Equals(address));
 
         public Customer AddCustomer(string name, decimal money)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ShopsException("Customer should has name");
-            if (CustomerNameExists(name))
-                throw new ShopsException("The customer already exists");
 
             var customer = new Customer(name, money, _customerId);
             _customerId++;
@@ -55,36 +51,36 @@ namespace Shops.Services
             return shop;
         }
 
-        public Product GetProduct(Shop shop, Product product)
+        public Product GetProduct(Shop shop, string name)
         {
-            if (product is null)
-                throw new ShopsException("Didn't enter the product");
+            if (string.IsNullOrEmpty(name))
+                throw new ShopsException("String is null or empty");
             if (shop is null)
                 throw new ShopsException("Didn't enter the shop");
 
-            Product selectedProduct = shop.Products.Single(x => x.ProductName == product.ProductName);
+            Product selectedProduct = shop.Products.Single(x => x.ProductName == name);
 
-            return product;
+            return selectedProduct;
         }
 
         public Shop DeliveryGoods(Shop shop, List<Product> products)
         {
             foreach (Product product in products)
             {
-                if (shop.Products.All(x => x.ProductName != product.ProductName))
+                Product selectedProduct = shop.Products.SingleOrDefault(x => x.ProductName == product.ProductName);
+                if (selectedProduct is null)
                 {
                     shop.AddShopsProducts(product);
-                    break;
+                    continue;
                 }
 
-                Product selectedProduct = shop.Products.Single(x => x.ProductName == product.ProductName);
                 selectedProduct.ChangeQuantityDelivery(product.Quantity);
             }
 
             return shop;
         }
 
-        public Shop AddProduct(Shop shop, Product product)
+        public Shop AddShopsProduct(Shop shop, Product product)
         {
             if (ShopsProductExists(shop, product.ProductName))
                 throw new ShopsException("This product already exists");
@@ -106,10 +102,10 @@ namespace Shops.Services
 
         public Shop FindShop(int id)
         {
-            if (_shops.All(shop => shop.Id != id))
-                throw new ShopsException("This shop doesn't exists");
+            Shop selectedShop = _shops.SingleOrDefault(shop => shop.Id == id);
 
-            Shop selectedShop = _shops.Single(shop => shop.Id == id);
+            if (selectedShop is null)
+                throw new ShopsException("This shop doesn't exists");
 
             return selectedShop;
         }
@@ -140,15 +136,13 @@ namespace Shops.Services
             if (products is null)
                 throw new ShopsException("List doesn't exists");
 
-            var selectedShops = _shops.Where(shop => !products.Any(product => shop.Products.All(x => x.ProductName != product.ProductName))).ToList();
+            var selectedShops = _shops.Where(shop => shop.ContainsAllProduct(products)).ToList();
 
             if (selectedShops.Count == 0)
                 throw new ShopsException("Shop with this products doesn't exists");
 
-            Shop selectedShop = selectedShops[0];
-
-            decimal sum = products.Sum(product =>
-                selectedShop.Products.Single(x => x.ProductName == product.ProductName).Price);
+            decimal sum = decimal.MaxValue;
+            Shop selectedShop = null;
 
             foreach (Shop shop in selectedShops)
             {
@@ -164,26 +158,21 @@ namespace Shops.Services
 
         public void PurchaseGoods(Shop shop, Customer customer)
         {
-            if (customer.Products.Any(product => shop.Products.All(x => x.ProductName != product.ProductName)))
+            if (!shop.ContainsAllProduct(customer.Products))
                 throw new ShopsException("The store does not have the right product");
 
-            if (customer.Products.Any(product => shop.Products.All(x => x.ProductName != product.ProductName || x.Quantity < product.Quantity)))
-            {
+            if (!shop.ContainsEnoughProducts(customer.Products))
                 throw new ShopsException("There aren't enough products in the store or there are none");
-            }
 
             decimal sum = customer.Products.Sum(product => product.Quantity * shop.Products.Single(x => x.ProductName == product.ProductName).Price);
+
+            customer.DecreaseAmountMoney(sum);
 
             foreach (Product product in customer.Products)
             {
                 Product selectedProduct = shop.Products.Single(x => x.ProductName == product.ProductName);
                 selectedProduct.ChangeQuantityWhenBuying(product.Quantity);
             }
-
-            if (sum > customer.Money)
-                throw new ShopsException("Not enough money");
-
-            customer.ChangeAmountMoney(sum);
         }
     }
 }
