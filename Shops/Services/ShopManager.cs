@@ -22,8 +22,8 @@ namespace Shops.Services
         public bool CustomerNameExists(string name) => _customers.Any(customer => customer.Name == name);
         public bool ShopsProductExists(Shop shop, string name) => shop.Products.Any(product => product.ProductName == name);
         public bool CustomersProductExists(Customer customer, string name) => customer.Products.Any(product => product.ProductName == name);
-        public bool AdressExists(Adress adress) => _shops.Any(shop =>
-            shop.Location.Street == adress.Street && shop.Location.NumberHouse == adress.NumberHouse);
+        public bool AddressExists(Address address) => _shops.Any(shop =>
+            shop.Location.Street == address.Street && shop.Location.NumberHouse == address.NumberHouse);
 
         public Customer AddCustomer(string name, decimal money)
         {
@@ -40,14 +40,14 @@ namespace Shops.Services
             return customer;
         }
 
-        public Shop AddShop(string name, Adress adress)
+        public Shop AddShop(string name, Address address)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ShopsException("Customer should has name");
-            if (AdressExists(adress))
-                throw new ShopsException("Adress exists");
+            if (AddressExists(address))
+                throw new ShopsException("Address exists");
 
-            var shop = new Shop(name, adress, _shopId);
+            var shop = new Shop(name, address, _shopId);
             _shopId++;
 
             _shops.Add(shop);
