@@ -19,7 +19,7 @@ namespace Shops.Models
         }
 
         public string ShopName { get; }
-        public Address Location { get; }
+        public Address Address { get; }
         public int Id { get; }
         public IReadOnlyList<Product> Products => _products;
 
