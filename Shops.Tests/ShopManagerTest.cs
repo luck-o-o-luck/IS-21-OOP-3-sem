@@ -23,7 +23,7 @@ namespace Shops.Tests
         public void AddProductToShop_ShopHasProduct()
         {
             _shopManager = new ShopManager();
-            _shopManager.AddShop("Пятерочка", new Adress("улица Декабристов", 14));
+            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
             _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
             Assert.AreEqual(_shopManager.FindShop(1).Products[0].ProductName, "Банан");
             Assert.AreEqual(_shopManager.FindShop(1).Products[0].Price, 123);
@@ -34,7 +34,7 @@ namespace Shops.Tests
         public void AddProductToShop_ChangePriceProductInTheShop()
         {
             _shopManager = new ShopManager();
-            _shopManager.AddShop("Пятерочка", new Adress("улица Декабристов", 14));
+            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
             
             _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
             Assert.AreEqual(_shopManager.FindShop(1).Products[0].Price, 123);
@@ -49,13 +49,13 @@ namespace Shops.Tests
         {
             _shopManager = new ShopManager();
             
-            _shopManager.AddShop("Пятерочка", new Adress("улица Декабристов", 14));
+            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
             _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
             
-            _shopManager.AddShop("Пятерочка", new Adress("большая Пушкарская", 12));
+            _shopManager.AddShop("Пятерочка", new Address("большая Пушкарская", 12));
             _shopManager.AddProduct(_shopManager.FindShop(2), new Product("Банан", 23, 12));
             
-            _shopManager.AddShop("Пятерочка", new Adress("улица Саблинская", 11));
+            _shopManager.AddShop("Пятерочка", new Address("улица Саблинская", 11));
             _shopManager.AddProduct(_shopManager.FindShop(3), new Product("Банан", 123, 12));
 
             List<Product> products = new List<Product>();
@@ -68,7 +68,7 @@ namespace Shops.Tests
         public void PurchaseOfProducts_TheNumberOfProductsAndMoneyHasChanged()
         {
             _shopManager = new ShopManager();
-            _shopManager.AddShop("Пятерочка", new Adress("улица Декабристов", 14));
+            _shopManager.AddShop("Пятерочка", new Address("улица Декабристов", 14));
             _shopManager.AddProduct(_shopManager.FindShop(1), new Product("Банан", 123, 12));
 
             _shopManager.AddCustomer("Васютинская Ксения", 12345);

@@ -6,7 +6,7 @@ namespace Shops.Services
     public interface IShopManager
     {
         Customer AddCustomer(string name, decimal money);
-        Shop AddShop(string name, Adress adress);
+        Shop AddShop(string name, Address address);
         Product GetProduct(Shop shop, Product product);
 
         Shop DeliveryGoods(Shop shop, List<Product> products);

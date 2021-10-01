@@ -7,7 +7,7 @@ namespace Shops.Models
     {
         private List<Product> _products;
 
-        public Shop(string name, Adress location, int id)
+        public Shop(string name, Address location, int id)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ShopsException("String is null or empty");
@@ -19,7 +19,7 @@ namespace Shops.Models
         }
 
         public string ShopName { get; }
-        public Adress Location { get; }
+        public Address Location { get; }
         public int Id { get; }
         public IReadOnlyList<Product> Products => _products;
 

@@ -2,9 +2,9 @@ using Shops.Tools;
 
 namespace Shops.Models
 {
-    public class Adress
+    public class Address
     {
-        public Adress(string street, int numberHouse)
+        public Address(string street, int numberHouse)
         {
             if (string.IsNullOrEmpty(street))
                 throw new ShopsException("String is null or empty");
