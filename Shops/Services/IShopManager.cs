@@ -7,10 +7,10 @@ namespace Shops.Services
     {
         Customer AddCustomer(string name, decimal money);
         Shop AddShop(string name, Address address);
-        Product GetProduct(Shop shop, Product product);
+        Product GetProduct(Shop shop, string name);
 
         Shop DeliveryGoods(Shop shop, List<Product> products);
-        Shop AddProduct(Shop shop, Product product);
+        Shop AddShopsProduct(Shop shop, Product product);
         Customer AddCustomersProduct(Customer customer, Product product);
         Shop FindShop(int id);
         Customer FindCustomer(string name);
