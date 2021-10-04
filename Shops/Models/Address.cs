@@ -1,3 +1,4 @@
+using System;
 using Shops.Tools;
 
 namespace Shops.Models
@@ -30,7 +31,7 @@ namespace Shops.Models
 
         public override int GetHashCode()
         {
-            return Street.Length + NumberHouse;
+            return (Street + " " + Convert.ToString(NumberHouse)).GetHashCode();
         }
     }
 }
