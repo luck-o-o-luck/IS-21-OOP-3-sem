@@ -31,19 +31,13 @@ namespace Shops.Models
 
         public bool ContainsAllProduct(IReadOnlyList<Product> products)
         {
-            if (products.Any(product => _products.All(x => x.ProductName != product.ProductName)))
-                return false;
-
-            return true;
+            return products.All(product => _products.Any(x => x.ProductName == product.ProductName));
         }
 
         public bool ContainsEnoughProducts(IReadOnlyList<Product> products)
         {
-            if (products.Any(product =>
-                _products.All(x => x.ProductName != product.ProductName || x.Quantity < product.Quantity)))
-                return false;
-
-            return true;
+            return products.All(product =>
+                _products.Any(x => x.ProductName == product.ProductName || x.Quantity >= product.Quantity));
         }
     }
 }
