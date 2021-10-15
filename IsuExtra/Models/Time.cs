@@ -18,7 +18,7 @@ namespace IsuExtra.Models
                 throw new IsuExtraException("There's no such time");
         }
 
-        public int Hours { get; private set; }
-        public int Minutes { get; private set; }
+        public int Hours { get; }
+        public int Minutes { get; }
     }
 }
