@@ -31,8 +31,8 @@ namespace IsuExtra.Models
         public string Teacher { get; }
         public Group<MegafacultyStudent> Group { get; }
         public int Auditorium { get; }
-        public Time StartLessons { get; private set; }
-        public Time EndLessons { get; private set; }
+        public Time StartLessons { get; }
+        public Time EndLessons { get; }
         public string Day { get; }
     }
 }
