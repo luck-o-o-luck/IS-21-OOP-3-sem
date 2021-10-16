@@ -5,16 +5,16 @@ namespace IsuExtra.Services
 {
     public interface IIsuExtraService
     {
-        OGNP AddOGNP(string name, char faculty);
+        Ognp AddOgnp(string name, char faculty);
         MegafacultyStudent AddStudent(MegafacultyGroup group, string name);
         MegafacultyGroup AddGroup(string name);
-        StreamOGNP AddStreamOGNP(Schedule schedule, char faculty, string name);
+        StreamOgnp AddStreamOgnp(Schedule schedule, char faculty, string name);
         Schedule AddScheduleForGroup(Schedule newShedule, MegafacultyGroup group);
 
-        IReadOnlyList<StreamOGNP> GetStreamsOGNP(OGNP ognp);
-        MegafacultyStudent AddStudentToStreamOGNP(MegafacultyStudent student, StreamOGNP streamOgnp);
-        MegafacultyStudent CancelStudentsOGNP(MegafacultyStudent student, OGNP ognp);
-        IReadOnlyList<MegafacultyStudent> GetStudentsFromOGNP(StreamOGNP ognp);
+        IReadOnlyList<StreamOgnp> GetStreamsOgnp(Ognp ognp);
+        MegafacultyStudent AddStudentToStreamOgnp(MegafacultyStudent student, StreamOgnp streamOgnp);
+        MegafacultyStudent CancelStudentsOgnp(MegafacultyStudent student, Ognp ognp);
+        IReadOnlyList<MegafacultyStudent> GetStudentsFromOgnp(StreamOgnp ognp);
         IReadOnlyList<MegafacultyStudent> GetUnsubscribedStudents(MegafacultyGroup group);
     }
 }

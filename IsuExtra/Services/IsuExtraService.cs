@@ -11,40 +11,38 @@ namespace IsuExtra.Services
 {
     public class IsuExtraService : IIsuExtraService
     {
-        private List<OGNP> _ognps;
+        private List<Ognp> _ognps;
         private List<MegafacultyStudent> _students;
         private List<MegafacultyGroup> _groups;
         private int _studentId = 100000;
 
         public IsuExtraService()
         {
-            _ognps = new List<OGNP>();
+            _ognps = new List<Ognp>();
             _groups = new List<MegafacultyGroup>();
             _students = new List<MegafacultyStudent>();
         }
 
-        public OGNP FindOGNP(string name) => _ognps.SingleOrDefault(ognp => ognp.NameOGNP == name);
+        public Ognp FindOGNP(string name) => _ognps.SingleOrDefault(ognp => ognp.NameOGNP == name);
         public MegafacultyStudent FindStudent(string name) => _students.SingleOrDefault(student => student.Name == name);
         public MegafacultyGroup FindGroup(string name) => _groups.SingleOrDefault(group => group.FullNameGroup == name);
 
-        public bool StudentExistsInOGNP(string name, StreamOGNP ognp) =>
+        public bool StudentExistsInOGNP(string name, StreamOgnp ognp) =>
             ognp.Students.Any(student => student.Name == name);
         public bool OGNPExists(string name) => _ognps.Any(ognp => string.Equals(ognp.NameOGNP, name, StringComparison.CurrentCultureIgnoreCase));
         public bool StudentExists(string name) => _students.Any(student => string.Equals(student.Name, name, StringComparison.CurrentCultureIgnoreCase));
         public bool GroupExists(string name) => _groups.Any(group => string.Equals(@group.FullNameGroup, name, StringComparison.CurrentCultureIgnoreCase));
 
-        public OGNP AddOGNP(string name, char faculty)
+        public Ognp AddOgnp(string name, char faculty)
         {
             if (!OGNPExists(name))
             {
-                var ognp = new OGNP(name, faculty);
+                var ognp = new Ognp(name, faculty);
                 _ognps.Add(ognp);
                 return ognp;
             }
-            else
-            {
-                throw new IsuExtraException("This OGNP already exists");
-            }
+
+            throw new IsuExtraException("This OGNP already exists");
         }
 
         public MegafacultyStudent AddStudent(MegafacultyGroup group, string name)
@@ -64,7 +62,7 @@ namespace IsuExtra.Services
             if (!GroupExists(group.FullNameGroup))
                 _groups.Add(group);
 
-            group.AddStudentToGroup(student);
+            group.AddStudentsToGroup(student);
             _students.Add(student);
 
             return student;
@@ -81,17 +79,17 @@ namespace IsuExtra.Services
             return group;
         }
 
-        public StreamOGNP AddStreamOGNP(Schedule schedule, char faculty, string name)
+        public StreamOgnp AddStreamOgnp(Schedule schedule, char faculty, string name)
         {
             var selectedOGNP = FindOGNP(name);
-            var streamOGNP = new StreamOGNP(schedule, selectedOGNP, faculty, name);
+            var streamOGNP = new StreamOgnp(schedule, selectedOGNP, faculty, name);
 
             selectedOGNP.AddStreamOfOGNP(streamOGNP);
 
             return streamOGNP;
         }
 
-        public IReadOnlyList<StreamOGNP> GetStreamsOGNP(OGNP ognp)
+        public IReadOnlyList<StreamOgnp> GetStreamsOgnp(Ognp ognp)
         {
             if (ognp is null)
                 throw new IsuExtraException("OGNP is null");
@@ -102,35 +100,36 @@ namespace IsuExtra.Services
             return ognp.Streams;
         }
 
-        public MegafacultyStudent AddStudentToStreamOGNP(MegafacultyStudent student, StreamOGNP streamOgnp)
+        public MegafacultyStudent AddStudentToStreamOgnp(MegafacultyStudent student, StreamOgnp streamOgnp)
         {
             if (student is null)
                 throw new IsuExtraException("Student is null or doesn't exist");
             if (streamOgnp is null)
-                throw new IsuExtraException("Stream ognp is null or doesn't exist");
+                throw new IsuExtraException("Stream OGNP is null or doesn't exist");
             if (StudentExistsInOGNP(student.Name, streamOgnp))
                 throw new IsuExtraException("This student already has this OGNP");
 
             student.AddOGNPForStudent(streamOgnp);
-            streamOgnp.AddStudentToOGNPGroup(student);
+            streamOgnp.AddStudentToOgnpGroup(student);
 
             return student;
         }
 
-        public MegafacultyStudent CancelStudentsOGNP(MegafacultyStudent student, OGNP ognp)
+        public MegafacultyStudent CancelStudentsOgnp(MegafacultyStudent student, Ognp ognp)
         {
             if (ognp is null)
                 throw new IsuExtraException("OGNP doesn't exist");
             if (student is null)
                 throw new IsuExtraException("Student doesn't exist");
 
-            StreamOGNP streamOGNP = student.CancelOGNP(ognp);
-            streamOGNP.RemoveStudentFromOGNP(student);
+            StreamOgnp streamOgnp = student.Ognp;
+            student.CancelOGNP(ognp);
+            streamOgnp.RemoveStudentFromOgnp(student);
 
             return student;
         }
 
-        public IReadOnlyList<MegafacultyStudent> GetStudentsFromOGNP(StreamOGNP ognp)
+        public IReadOnlyList<MegafacultyStudent> GetStudentsFromOgnp(StreamOgnp ognp)
         {
             if (ognp is null)
                 throw new IsuExtraException("OGNP doesn't exist");
@@ -143,7 +142,7 @@ namespace IsuExtra.Services
             if (group is null)
                 throw new IsuExtraException("Group doesn't exist");
 
-            IReadOnlyList<MegafacultyStudent> selectedStudents = group.MegafacultyStudents.Where(student => student.CountOGNP < 2).ToList();
+            IReadOnlyList<MegafacultyStudent> selectedStudents = group.Students.Where(student => student.Ognp is null).ToList();
 
             return selectedStudents;
         }
