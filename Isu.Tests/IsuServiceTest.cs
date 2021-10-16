@@ -22,7 +22,7 @@ namespace Isu.Tests
         public void AddStudentToGroup_StudentHasGroupAndGroupContainsStudent()
         {
             _isuService = new IsuDataStore();
-            _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
+            _isuService.AddStudent(new Group<Student>("M3201"), "Васютинская Ксения");
             Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения").GroupIsu, _isuService.FindGroup("M3201"));
             Assert.AreEqual(_isuService.FindStudent("Васютинская Ксения"),
                 _isuService.FindGroup("M3201").Students.Single(student => student.Name == "Васютинская Ксения"));
@@ -41,7 +41,7 @@ namespace Isu.Tests
             
             Assert.Catch<IsuException>(()=>
             {
-                _isuService.AddStudent(new Group("M3201"), "Халеев Михаил");
+                _isuService.AddStudent(new Group<Student>("M3201"), "Халеев Михаил");
             });
         }
 
@@ -61,8 +61,8 @@ namespace Isu.Tests
             Assert.Catch<IsuException>(() =>
             {
                 _isuService = new IsuDataStore();
-                _isuService.AddStudent(new Group("M3201"), "Васютинская Ксения");
-                _isuService.ChangeStudentGroup(_isuService.FindStudent("Васютинская Ксения"), new Group("M3401"));
+                _isuService.AddStudent(new Group<Student>("M3201"), "Васютинская Ксения");
+                _isuService.ChangeStudentGroup(_isuService.FindStudent("Васютинская Ксения"), new Group<Student>("M3401"));
             });
         }
     }

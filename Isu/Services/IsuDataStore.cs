@@ -9,7 +9,7 @@ namespace Isu.Services
     public class IsuDataStore : IIsuService
     {
         private List<Student> _students;
-        private List<Group> _groups;
+        private List<Group<Student>> _groups;
         private List<CourseNumber> _courses;
         private Display _display;
         private int _studentId = 100000;
@@ -17,7 +17,7 @@ namespace Isu.Services
         public IsuDataStore()
         {
             _students = new List<Student>();
-            _groups = new List<Group>();
+            _groups = new List<Group<Student>>();
             _courses = new List<CourseNumber>();
             _display = new Display();
         }
@@ -27,12 +27,12 @@ namespace Isu.Services
         public bool GroupExists(string name) => _groups.Any(group => string.Equals(@group.FullNameGroup, name, StringComparison.CurrentCultureIgnoreCase));
         public bool CourseExists(int courseNumber) => _courses.Any(course => course.Course == courseNumber);
 
-        public Group AddGroup(string name)
+        public Group<Student> AddGroup(string name)
         {
             if (GroupExists(name))
                 throw new IsuException("The group already exists");
 
-            var group = new Group(name);
+            var group = new Group<Student>(name);
             _groups.Add(group);
 
             if (!CourseExists(short.Parse(name.Substring(2, 1))))
@@ -49,7 +49,7 @@ namespace Isu.Services
             return group;
         }
 
-        public Student AddStudent(Group group, string name)
+        public Student AddStudent(Group<Student> group, string name)
         {
             if (StudentExists(name))
                 throw new IsuException("The student already exists");
@@ -108,7 +108,7 @@ namespace Isu.Services
             if (!GroupExists(groupName))
                 throw new IsuException("The group doesn't exists with this name");
 
-            Group selectedGroup = _groups.Single(group => group.FullNameGroup.ToLower() == groupName.ToLower());
+            Group<Student> selectedGroup = _groups.Single(group => group.FullNameGroup.ToLower() == groupName.ToLower());
 
             if (selectedGroup.Students.Count == 0)
                 throw new IsuException("Students from group doesn't exists");
@@ -121,7 +121,7 @@ namespace Isu.Services
             if (!CourseExists(courseNumber.Course))
                 throw new IsuException("The course doesn't exists");
 
-            IReadOnlyList<Group> selectedGroups = _courses
+            IReadOnlyList<Group<Student>> selectedGroups = _courses
                 .Single(course => course.Course == courseNumber.Course)
                 .GroupsFromCourse;
 
@@ -133,26 +133,26 @@ namespace Isu.Services
             return selectedStudents;
         }
 
-        public Group FindGroup(string groupName)
+        public Group<Student> FindGroup(string groupName)
         {
             if (!GroupExists(groupName))
                 throw new IsuException("The group doesn't exists with this name");
 
-            Group selectedGroup = _groups.Single(group => group.FullNameGroup.ToLower() == groupName.ToLower());
+            Group<Student> selectedGroup = _groups.Single(group => group.FullNameGroup.ToLower() == groupName.ToLower());
 
             return selectedGroup;
         }
 
-        public IReadOnlyList<Group> FindGroups(CourseNumber courseNumber)
+        public IReadOnlyList<Group<Student>> FindGroups(CourseNumber courseNumber)
         {
-            IReadOnlyList<Group> selectedGroups = _courses
+            IReadOnlyList<Group<Student>> selectedGroups = _courses
                 .Single(course => course.Course == courseNumber.Course)
                 .GroupsFromCourse;
 
             return selectedGroups;
         }
 
-        public void ChangeStudentGroup(Student student, Group newGroup)
+        public void ChangeStudentGroup(Student student, Group<Student> newGroup)
         {
             if (!StudentExists(student.Name))
                 throw new IsuException("The student can't be found");

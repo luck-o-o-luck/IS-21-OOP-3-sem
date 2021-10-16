@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Isu.Models;
 
 namespace Isu.Services
@@ -12,7 +13,7 @@ namespace Isu.Services
                               $"group number {student.GroupIsu.InformationAboutGroup.GroupNumber}");
         }
 
-        public void PrintGroup(Group group)
+        public void PrintGroup(Group<Student> group)
         {
             Console.WriteLine($"  Group number {group.InformationAboutGroup.GroupNumber}");
             foreach (Student student in group.Students)
@@ -24,7 +25,7 @@ namespace Isu.Services
         public void PrintCourse(CourseNumber course)
         {
             Console.WriteLine($"Course number {course.Course}");
-            foreach (Group group in course.GroupsFromCourse)
+            foreach (Group<Student> group in course.GroupsFromCourse)
             {
               PrintGroup(group);
             }
