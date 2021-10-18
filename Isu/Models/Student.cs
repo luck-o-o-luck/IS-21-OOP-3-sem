@@ -6,7 +6,7 @@ namespace Isu.Models
 {
     public class Student
     {
-        public Student(string fullName, Group groupIsu, int id)
+        public Student(string fullName, Group<Student> groupIsu, int id)
         {
             if (string.IsNullOrWhiteSpace(fullName))
                 throw new IsuException("String is null or empty");
@@ -17,10 +17,10 @@ namespace Isu.Models
         }
 
         public string Name { get; }
-        public Group GroupIsu { get; set; }
+        public Group<Student> GroupIsu { get; set; }
         public int Id { get; }
 
-        public void ChangeGroup(Group newGroup)
+        public void ChangeGroup(Group<Student> newGroup)
         {
             this.GroupIsu = newGroup;
         }

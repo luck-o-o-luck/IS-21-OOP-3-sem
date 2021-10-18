@@ -4,12 +4,13 @@ using Isu.Tools;
 
 namespace Isu.Models
 {
-    public class Group
+    public class Group<TStudent>
+        where TStudent : class
     {
         private const int LengthNameGroup = 5;
         private const int MaxCountStudent = 20;
 
-        private List<Student> _students;
+        private List<TStudent> _students;
         public Group(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -19,14 +20,14 @@ namespace Isu.Models
 
             FullNameGroup = name;
             InformationAboutGroup = new GroupInformation(name);
-            _students = new List<Student>();
+            _students = new List<TStudent>();
         }
 
         public string FullNameGroup { get; }
         public GroupInformation InformationAboutGroup { get; }
-        public IReadOnlyList<Student> Students => _students;
+        public IReadOnlyList<TStudent> Students => _students;
         public int MaxCountStudents => MaxCountStudent;
-        public void AddStudentsToGroup(Student student)
+        public void AddStudentsToGroup(TStudent student)
         {
             _students.Add(student);
         }
