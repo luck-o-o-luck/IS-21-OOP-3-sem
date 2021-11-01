@@ -12,9 +12,11 @@ namespace Backups.Models
         {
             if (string.IsNullOrEmpty(name))
                 throw new BackupsException("Name is null");
+            if (storages.Count == 0)
+                throw new BackupsException("You don't have files for saving");
 
             Date = date;
-            _storages = storages ?? throw new BackupsException("You don't have files for saving");
+            _storages = storages;
             Name = name + $"_{id}";
         }
 
