@@ -15,12 +15,12 @@ namespace Backups.Algorithms
 
             var storages = new List<Storage>();
 
-            foreach (JobObject job in backupJob.JobObjects)
+            foreach (JobObject jobObject in backupJob.JobObjects)
             {
                 var zip = new ZipFile();
-                zip.AddFile(job.FullPath);
-                var storage = new Storage(job.FileName + $"_{number}.zip", zip);
-                storage.AddJobObject(job);
+                zip.AddFile(jobObject.FullPath);
+                var storage = new Storage(jobObject.FileName + $"_{number}.zip", zip);
+                storage.AddJobObject(jobObject);
                 storages.Add(storage);
             }
 
