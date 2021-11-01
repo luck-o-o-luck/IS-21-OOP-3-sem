@@ -18,17 +18,19 @@ namespace Backups.Algorithms
             var zip = new ZipFile();
             var storages = new List<Storage>();
 
-            foreach (JobObject job in backupJob.JobObjects)
+            foreach (JobObject jobObject in backupJob.JobObjects)
             {
-                zip.AddFile(job.FullPath);
+                zip.AddFile(jobObject.FullPath);
             }
 
-            storages.Add(new Storage($"Archive_{number}.zip", zip));
+            var storage = new Storage($"Archive_{number}.zip", zip);
 
-            foreach (JobObject job in backupJob.JobObjects)
+            foreach (JobObject jobObject in backupJob.JobObjects)
             {
-                storages.Last().AddJobObject(job);
+                storage.AddJobObject(jobObject);
             }
+
+            storages.Add(storage);
 
             return storages;
         }
