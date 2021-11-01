@@ -57,8 +57,6 @@ namespace Backups.Models
            _id++;
            _restorePoints.Add(restorePoint);
            Repository.Save(this);
-
-           Console.WriteLine("Backup created");
        }
     }
 }
