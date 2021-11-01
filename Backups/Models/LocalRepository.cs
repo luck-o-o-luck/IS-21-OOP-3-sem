@@ -13,11 +13,11 @@ namespace Backups.Models
             if (string.IsNullOrEmpty(path))
                 throw new BackupsException("Path is null");
 
-            Path = path;
-            DirectoryInfo = Directory.CreateDirectory(Path);
+            FullPathRepository = path;
+            DirectoryInfo = Directory.CreateDirectory(FullPathRepository);
         }
 
-        public string Path { get; }
+        public string FullPathRepository { get; }
         public DirectoryInfo DirectoryInfo { get; }
 
         public void Save(BackupJob backupJob)
@@ -25,15 +25,16 @@ namespace Backups.Models
             if (backupJob is null)
                 throw new BackupsException("Backup job is null");
 
-            var dirInfo = new DirectoryInfo(DirectoryInfo.FullName + "/" + backupJob.Name + "/" +
-                                            backupJob.RestorePoints.Last().Name);
+            string path = Path.Combine(DirectoryInfo.FullName, backupJob.Name, backupJob.RestorePoints.Last().Name);
+
+            var dirInfo = new DirectoryInfo(path);
 
             if (!dirInfo.Exists)
                 dirInfo.Create();
 
             foreach (Storage storage in backupJob.RestorePoints.Last().Storages)
             {
-                storage.ZipFile.Save(dirInfo + "/" + storage.Path);
+                storage.ZipFile.Save(Path.Combine(path, storage.Path));
             }
         }
     }
