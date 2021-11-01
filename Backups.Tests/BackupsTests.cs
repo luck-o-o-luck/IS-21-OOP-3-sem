@@ -9,6 +9,7 @@ namespace Backups.Tests
     public class BackupsTests
     {
         [Test]
+        [Ignore("Ignore a test")]
         public void CreateBackupJob_CheckCountRestorePointsAndStorages()
         {
             const string path = @"C:\kysect";
