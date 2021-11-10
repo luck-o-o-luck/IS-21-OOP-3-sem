@@ -1,4 +1,5 @@
 using Backups.Tools;
+using Banks.Tools;
 
 namespace Banks.Models.Clients
 {
@@ -13,7 +14,7 @@ namespace Banks.Models.Clients
         public ClientBuilder SetFullName(string name)
         {
             if (string.IsNullOrEmpty(name))
-                throw new BackupsException("Name is null");
+                throw new BanksException("Name is null");
 
             _fullName = name;
             return this;
@@ -22,7 +23,7 @@ namespace Banks.Models.Clients
         public ClientBuilder SetPassport(string passport)
         {
             if (string.IsNullOrEmpty(passport))
-                throw new BackupsException("Passport is null");
+                throw new BanksException("Passport is null");
 
             _passport = passport;
             return this;
@@ -31,7 +32,7 @@ namespace Banks.Models.Clients
         public ClientBuilder SetNumberPhone(string numberPhone)
         {
             if (string.IsNullOrEmpty(numberPhone))
-                throw new BackupsException("Phone number is null");
+                throw new BanksException("Phone number is null");
 
             _numberPhone = numberPhone;
             return this;
@@ -39,16 +40,16 @@ namespace Banks.Models.Clients
 
         public ClientBuilder SetAddress(Address address)
         {
-            _address = address ?? throw new BackupsException("Address is null");
+            _address = address ?? throw new BanksException("Address is null");
             return this;
         }
 
         public Client Create()
         {
             if (string.IsNullOrEmpty(_fullName))
-                throw new BackupsException("Name doesn't exist");
+                throw new BanksException("Name doesn't exist");
             if (string.IsNullOrEmpty(_passport))
-                throw new BackupsException("Passport doesn't exist");
+                throw new BanksException("Passport doesn't exist");
 
             _client = new Client(_fullName, _passport, _numberPhone, _address);
             return _client;

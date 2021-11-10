@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Backups.Tools;
 using Banks.Models.Accounts;
+using Banks.Tools;
 
 namespace Banks.Models.Clients
 {
@@ -14,13 +15,13 @@ namespace Banks.Models.Clients
             if (!string.IsNullOrEmpty(numberPhone))
             {
                 if (numberPhone.Length != _maxCountNumbersOfNumberPhone)
-                    throw new BackupsException("Invalid phone number");
+                    throw new BanksException("Invalid phone number");
             }
 
             if (string.IsNullOrEmpty(fullName))
-                throw new BackupsException("Name doesn't exist");
+                throw new BanksException("Name doesn't exist");
             if (string.IsNullOrEmpty(passport))
-                throw new BackupsException("Passport doesn't exist");
+                throw new BanksException("Passport doesn't exist");
 
             _accounts = new List<Account>();
             FullName = fullName;
