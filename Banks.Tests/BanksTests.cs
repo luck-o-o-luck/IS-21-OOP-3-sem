@@ -94,11 +94,13 @@ namespace Banks.Tests
             var creditAccount = new CreditAccount(client, bank);
             var depositAccount = new DepositAccount(12345, client, new DateTime(2021, 12, 2), bank);
 
-            var transaction = new Transaction<DebitAccount>(debitAccount, 100);
-            transaction.RemittanceToAccount(debitAccount2);
-            transaction.RemittanceToAccount(creditAccount);
-            transaction.RemittanceToAccount(depositAccount);
-            
+            var transaction = new TransactionRemittanceToAccount(debitAccount, debitAccount2, 100);
+            transaction.TransactionWithAccount();
+            var transaction1 = new TransactionRemittanceToAccount(debitAccount, depositAccount, 100);
+            transaction1.TransactionWithAccount();
+            var transaction2 = new TransactionRemittanceToAccount(debitAccount, creditAccount, 100);
+            transaction2.TransactionWithAccount();
+
             Assert.AreEqual(debitAccount.Balance, 1260);
             Assert.AreEqual(debitAccount2.Balance, 1660);
             Assert.AreEqual(creditAccount.Balance, 1100);
