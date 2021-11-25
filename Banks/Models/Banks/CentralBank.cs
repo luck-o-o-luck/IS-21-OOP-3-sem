@@ -12,13 +12,13 @@ namespace Banks.Models.Banks
         private static CentralBank _instance = null;
         private List<Bank> _banks;
         private List<Client> _clients;
-        private List<Transaction<Account>> _transactions;
+        private List<Transaction> _transactions;
 
         private CentralBank()
         {
             _banks = new List<Bank>();
             _clients = new List<Client>();
-            _transactions = new List<Transaction<Account>>();
+            _transactions = new List<Transaction>();
             DateTimeProvider = new DateTimeProvider();
         }
 
@@ -32,7 +32,7 @@ namespace Banks.Models.Banks
 
         public Bank FindBank(string name) => _banks.SingleOrDefault(bank => bank.Name == name);
 
-        public Transaction<Account> FindTransaction(string id) =>
+        public Transaction FindTransaction(string id) =>
             _transactions.SingleOrDefault(transaction => transaction.Id.ToString() == id);
         public Client FindClient(string passport, Bank bank) =>
             _banks.Single(x => x.Name == bank.Name).Clients.Single(x => x.Passport == passport);
@@ -120,9 +120,28 @@ namespace Banks.Models.Banks
             DateTimeProvider.UpdateLastUpdateTime();
         }
 
-        public Transaction<Account> CreateTransaction(Account account, Bank bank, decimal money)
+        public Transaction CreateTransactionRemittanceToAccount(Account accountFromTransaction, Account accountForRemittance, Bank bank, decimal money)
         {
-            var transaction = new Transaction<Account>(account, money);
+            var transaction = new TransactionRemittanceToAccount(accountFromTransaction, accountForRemittance, money);
+            transaction.TransactionWithAccount();
+            _transactions.Add(transaction);
+
+            return transaction;
+        }
+
+        public Transaction CreateTransactionDepositMoney(Account account, Bank bank, decimal money)
+        {
+            var transaction = new TransactionDepositMoney(account, money);
+            transaction.TransactionWithAccount();
+            _transactions.Add(transaction);
+
+            return transaction;
+        }
+
+        public Transaction CreateTransactionWithdrawMoney(Account account, Bank bank, decimal money)
+        {
+            var transaction = new TransactionWithdrawMoney(account, money);
+            transaction.TransactionWithAccount();
             _transactions.Add(transaction);
 
             return transaction;
