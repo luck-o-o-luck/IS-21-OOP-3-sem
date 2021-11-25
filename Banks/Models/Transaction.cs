@@ -18,10 +18,14 @@ namespace Banks.Models
         }
 
         public TAccount Account { get; }
+        public Account AccountFotRemittance { get; private set; }
         public decimal Money { get; }
         public Guid Id { get; }
         public bool CanceledTransaction { get; private set; } = false;
         public bool CompletedTransaction { get; private set; } = false;
+        public bool IsDepositMoney { get; private set; }
+        public bool IsWithdrawMoney { get; private set; }
+        public bool IsRemittanceMoney { get; private set; }
 
         public Transaction<TAccount> RemittanceToAccount(Account account)
         {
@@ -29,6 +33,8 @@ namespace Banks.Models
             account.DepositMoney(Money);
 
             CompletedTransaction = true;
+            IsRemittanceMoney = true;
+            AccountFotRemittance = account;
 
             return this;
         }
@@ -37,6 +43,7 @@ namespace Banks.Models
         {
             Account.WithdrawMoney(Money);
             CompletedTransaction = true;
+            IsWithdrawMoney = true;
 
             return this;
         }
@@ -45,6 +52,7 @@ namespace Banks.Models
         {
             Account.DepositMoney(Money);
             CompletedTransaction = true;
+            IsDepositMoney = true;
 
             return this;
         }
@@ -56,7 +64,16 @@ namespace Banks.Models
             if (CanceledTransaction)
                 throw new BanksException("Transaction already canceled");
 
-            DepositMoneyAccount();
+            if (IsDepositMoney)
+                WithdrawMoneyAccount();
+            if (IsWithdrawMoney)
+                DepositMoneyAccount();
+            if (IsRemittanceMoney)
+            {
+                DepositMoneyAccount();
+                AccountFotRemittance.WithdrawMoney(Money);
+            }
+
             CanceledTransaction = true;
         }
     }
