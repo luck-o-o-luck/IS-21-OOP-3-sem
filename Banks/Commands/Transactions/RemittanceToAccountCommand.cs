@@ -31,8 +31,7 @@ namespace Banks.Commands
 
             Console.WriteLine("Enter money for transaction");
 
-            var transaction = centralBank.CreateTransaction(withdrawAccount, bank, Convert.ToDecimal(Console.ReadLine()));
-            transaction.RemittanceToAccount(depositAccount);
+            var transaction = centralBank.CreateTransactionRemittanceToAccount(withdrawAccount, depositAccount, bank, Convert.ToDecimal(Console.ReadLine()));
 
             Console.WriteLine("Remmitance passed successfully");
         }

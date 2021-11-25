@@ -25,8 +25,7 @@ namespace Banks.Commands
 
             Console.WriteLine("Enter money for transaction");
 
-            var transaction = centralBank.CreateTransaction(account, bank, Convert.ToDecimal(Console.ReadLine()));
-            transaction.DepositMoneyAccount();
+            var transaction = centralBank.CreateTransactionDepositMoney(account, bank, Convert.ToDecimal(Console.ReadLine()));
             Console.WriteLine("Deposit money passed successfully");
         }
     }
