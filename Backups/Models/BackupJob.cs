@@ -49,6 +49,14 @@ namespace Backups.Models
             _jobObjects.Remove(jobObject);
         }
 
+       public void DeleteRestorePoint(RestorePoint restorePoint)
+       {
+           if (restorePoint is null)
+               throw new BackupsException("Restore point is null");
+
+           _restorePoints.Remove(restorePoint);
+       }
+
        public void CreateBackup()
        {
            List<Storage> storages = Algorithm.CreateCopy(this, _id);
@@ -57,6 +65,14 @@ namespace Backups.Models
            _id++;
            _restorePoints.Add(restorePoint);
            Repository.Save(this);
+       }
+
+       public void ChangeRestorePoints(List<RestorePoint> restorePoints)
+       {
+           if (restorePoints.Count == 0)
+               throw new BackupsException("Amount restore points can't be null");
+
+           _restorePoints = restorePoints;
        }
     }
 }
