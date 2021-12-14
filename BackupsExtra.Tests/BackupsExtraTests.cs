@@ -10,6 +10,7 @@ namespace BackupsExtra.Tests
     public class BackupsExtraTests
     {
         [Test]
+        [Ignore("Ignore")]
         public void CreateBackupJob_CheckCountRestorePointsAndStorages()
         {
             var backup = new Backup();
