@@ -19,7 +19,7 @@ namespace BackupsExtra.Tests
             var repository = new LocalRepository(path);
             var algorithm = new AlgorithmSingleStorages();
             var hybridAlgorithm = new HybridAlgorithm();
-            hybridAlgorithm.CleaningWithAmountPointsLimit();
+            hybridAlgorithm.AddAlgorithm(new AmountPointsLimitAlgorithm());
             var backupJob = new BackupJobExtra(algorithm, repository, "FirstBackup", hybridAlgorithm, new DateTime(2021, 12, 14), 1);
 
             var jobObject1 = new JobObject(@"C:\kysect\SoBad.txt");

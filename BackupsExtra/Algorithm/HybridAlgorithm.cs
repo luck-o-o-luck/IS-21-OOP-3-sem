@@ -1,42 +1,33 @@
 using System;
+using System.Collections.Generic;
 using BackupsExtra.Models;
 using BackupsExtra.Tools;
+using NUnit.Framework;
 
 namespace BackupsExtra.Algorithm
 {
     public class HybridAlgorithm : ICleaningAlgorithm
     {
-        public bool CleanWithAmountPointsLimit { get; private set; }
-        public bool CleanWithDateLimit { get; private set; }
+        private List<ICleaningAlgorithm> _algoritms = new List<ICleaningAlgorithm>();
 
         public void Clean(BackupJobExtra backupJobExtra)
         {
-            if (!CleanWithDateLimit && !CleanWithAmountPointsLimit)
-                throw new BackupsExtraException("Can't do algorithm");
-
-            if (CleanWithDateLimit)
+            foreach (ICleaningAlgorithm algorithm in _algoritms)
             {
-                var algorithm = new DateLimitAlgorithm();
                 algorithm.Clean(backupJobExtra);
-                CleanWithDateLimit = false;
-            }
-
-            if (CleanWithAmountPointsLimit)
-            {
-                var algorithm = new AmountPointsLimitAlgorithm();
-                algorithm.Clean(backupJobExtra);
-                CleanWithAmountPointsLimit = false;
             }
         }
 
-        public void CleaningWithAmountPointsLimit()
+        public void AddAlgorithm(ICleaningAlgorithm algorithm)
         {
-            CleanWithAmountPointsLimit = true;
-        }
+            if (algorithm is null)
+                throw new BackupsExtraException("Algorithm is null");
+            if (_algoritms.Count == 2)
+                throw new BackupsExtraException("You can't add algorithm more than twice");
+            if (_algoritms.Count != 0 && _algoritms[0].GetType() == algorithm.GetType())
+                throw new BackupsExtraException("Types are equal");
 
-        public void CleaningWithDateLimit()
-        {
-            CleanWithDateLimit = true;
+            _algoritms.Add(algorithm);
         }
     }
 }
