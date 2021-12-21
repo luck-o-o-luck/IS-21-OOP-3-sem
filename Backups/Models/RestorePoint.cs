@@ -31,5 +31,10 @@ namespace Backups.Models
 
             _storages.Add(storage);
         }
+
+        public void DeleteStorages(Storage storage)
+        {
+            _storages.Remove(storage);
+        }
     }
 }
