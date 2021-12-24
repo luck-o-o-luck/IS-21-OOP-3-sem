@@ -6,9 +6,9 @@ using BackupsExtra.Models;
 
 namespace BackupsExtra.Algorithm
 {
-    public class MergePoints
+    public class MergePoints : IRestorePointRetainer
     {
-        public void Merge(List<RestorePoint> points, BackupJobExtra backupJob)
+        public void Retain(IReadOnlyCollection<RestorePoint> points, BackupJob backupJob)
         {
             var algorithm = new AlgorithmSingleStorages();
 
