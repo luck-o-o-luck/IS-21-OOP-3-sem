@@ -19,9 +19,7 @@ namespace BackupsExtra.Tests
 
             var repository = new LocalRepository(path);
             var algorithm = new AlgorithmSingleStorages();
-            var hybridAlgorithm = new HybridAlgorithm();
-            hybridAlgorithm.AddAlgorithm(new AmountPointsLimitAlgorithm(1));
-            var backupJob = new BackupJobExtra(algorithm, repository, "FirstBackup", hybridAlgorithm);
+            var backupJob = new BackupJobExtra(algorithm, repository, "FirstBackup", new MergePoints());
 
             var jobObject1 = new JobObject(@"C:\kysect\SoBad.txt");
             var jobObject2 = new JobObject(@"C:\kysect\PacifyHer.txt");
@@ -30,8 +28,10 @@ namespace BackupsExtra.Tests
             backup.AddBackupJob(backupJob);
             backupJob.CreateBackup();
             backupJob.CreateBackup();
-
-            backupJob.CleaningAlgorithm.Clean(backupJob);
+            backupJob.AddSelector(new RestorePointSelectorByAmount(1));
+            
+            var clean = new CleanPoints();
+            clean.Clean(backupJob);
             Assert.AreEqual(backupJob.RestorePoints.Count, 1);
         }
     }
