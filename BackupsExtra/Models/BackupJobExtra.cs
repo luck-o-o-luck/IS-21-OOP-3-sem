@@ -11,22 +11,40 @@ namespace BackupsExtra.Models
 {
     public class BackupJobExtra : BackupJob
     {
+        private List<IRestorePointSelector> _selectors;
         public BackupJobExtra(
             IAlgorithm algorithm,
             IRepository repository,
             string name,
-            ICleaningAlgorithm cleaningAlgorithm)
+            IRestorePointRetainer retainer)
             : base(algorithm, repository, name)
         {
-            CleaningAlgorithm = cleaningAlgorithm ?? throw new BackupsExtraException("Cleaning algorithm is null");
+            _selectors = new List<IRestorePointSelector>();
+            RestorePointRetainer = retainer ?? throw new BackupsExtraException("Retainer can't be null");
         }
 
-        public ICleaningAlgorithm CleaningAlgorithm { get; private set; }
+        public IRestorePointRetainer RestorePointRetainer { get; private set; }
+        public List<IRestorePointSelector> Selectors => _selectors;
 
-        public void ChangeCleaningAlgorithm(ICleaningAlgorithm newCleaningAlgorithm)
+        public void AddSelector(IRestorePointSelector selector)
         {
-            CleaningAlgorithm = newCleaningAlgorithm ?? throw new BackupsExtraException("Cleaning algorithm is null");
-            Logger.LoggingInformation("Algorithm was changed");
+            if (selector is null)
+                throw new BackupsExtraException("Selector can't be null");
+
+            _selectors.Add(selector);
+        }
+
+        public void DeleteSelector(IRestorePointSelector selector)
+        {
+            if (selector is null)
+                throw new BackupsExtraException("Selector can't be null");
+
+            _selectors.Remove(selector);
+        }
+
+        public void ChangeRetainer(IRestorePointRetainer retainer)
+        {
+            RestorePointRetainer = retainer ?? throw new BackupsExtraException("Retainer can't be null");
         }
     }
 }
