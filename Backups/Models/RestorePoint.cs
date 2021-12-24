@@ -23,5 +23,18 @@ namespace Backups.Models
         public string Name { get; }
         public DateTime Date { get; }
         public IReadOnlyList<Storage> Storages => _storages;
+
+        public void AddStorage(Storage storage)
+        {
+            if (storage is null)
+                throw new BackupsException("Storage is null");
+
+            _storages.Add(storage);
+        }
+
+        public void DeleteStorages(Storage storage)
+        {
+            _storages.Remove(storage);
+        }
     }
 }

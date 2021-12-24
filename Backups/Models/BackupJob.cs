@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Backups.Services;
 using Backups.Tools;
@@ -30,6 +29,9 @@ namespace Backups.Models
        public IRepository Repository { get; }
        public IReadOnlyList<JobObject> JobObjects => _jobObjects;
        public IReadOnlyList<RestorePoint> RestorePoints => _restorePoints;
+       public IReadOnlyList<RestorePoint> GetRestorePoints() => _restorePoints;
+       public IReadOnlyList<JobObject> GetJobObjects() => _jobObjects;
+       public IAlgorithm GetAlgorithm() => Algorithm;
 
        public void AddJobObject(JobObject jobObject)
         {
@@ -49,6 +51,14 @@ namespace Backups.Models
             _jobObjects.Remove(jobObject);
         }
 
+       public void DeleteRestorePoint(RestorePoint restorePoint)
+       {
+           if (restorePoint is null)
+               throw new BackupsException("Restore point is null");
+
+           _restorePoints.Remove(restorePoint);
+       }
+
        public void CreateBackup()
        {
            List<Storage> storages = Algorithm.CreateCopy(this, _id);
@@ -57,6 +67,14 @@ namespace Backups.Models
            _id++;
            _restorePoints.Add(restorePoint);
            Repository.Save(this);
+       }
+
+       public void AddRestorePoint(RestorePoint restorePoint)
+       {
+           if (restorePoint is null)
+               throw new BackupsException("Restore point is null");
+
+           _restorePoints.Add(restorePoint);
        }
     }
 }
