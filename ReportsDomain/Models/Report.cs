@@ -7,12 +7,14 @@ namespace ReportsDomain.Models
 {
     public class Report
     {
-        private List<Task> _tasks;
-
+        private List<WorkTask> _tasks = new List<WorkTask>();
+        
         public Report() {}
-        public Report(Employee employee)
+        
+        public Report(Employee employee, List<WorkTask> tasks)
         {
             Writer = employee ?? throw new ReportsException("Employee is null");
+            _tasks = tasks;
             Id = Guid.NewGuid();
             Status = ReportStatus.Open;
         }
@@ -20,14 +22,14 @@ namespace ReportsDomain.Models
         public Guid Id { get; }
         public Employee Writer { get; private set; }
         public ReportStatus Status { get; private set; }
-        public IEnumerable<object> Tasks => _tasks;
+        public IReadOnlyList<WorkTask> Tasks => _tasks;
 
-        public void AddTask(ReportsDomain.Models.Task task)
+        public void AddTask(WorkTask workTask)
         {
-            if (task is null)
+            if (workTask is null)
                 throw new ReportsException("Task is null");
             
-            _tasks.Add(task);
+            _tasks.Add(workTask);
         }
     }
 }
