@@ -11,26 +11,16 @@ namespace ReportsDataAccess.DataBase
         public ReportsDbContext(DbContextOptions<ReportsDbContext> options)
             : base(options)
         {
-            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
-        public DbSet<ReportsDomain.Models.Task> Tasks { get; set; }
+        public DbSet<WorkTask> Tasks { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Report> Reports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ReportsDomain.Models.Task>().HasData(
-                new ReportsDomain.Models.Task("Pass OOP"),
-                new ReportsDomain.Models.Task("Get 80 points..."));
-
-            modelBuilder.Entity<Employee>().HasData(
-                new Employee(new NameEmployee(
-                        "Ksenia", "Vasyutinskaya", "Sergeevna"),
-                    EmployeeStatus.OrdinaryEmployee));
-            
-            modelBuilder.Entity<ReportsDomain.Models.Task>().OwnsMany(
+            modelBuilder.Entity<ReportsDomain.Models.WorkTask>().OwnsMany(
                 task => task.Modifications,
                 modification =>
                     modification.WithOwner());
