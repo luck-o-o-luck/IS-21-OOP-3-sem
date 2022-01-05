@@ -21,9 +21,9 @@ namespace ReportsWebApi.Controllers
         }
         
         [HttpPost]
-        public async Task<Employee> Create([FromBody] EmployeeDTO employeeDto)
+        public async Task<Employee> Create([FromBody] EmployeeDto employeeDto)
         {
-            return  await _employeeService.Create(new Employee(employeeDto.Name, employeeDto.Status));;
+            return  await _employeeService.Create(new Employee(employeeDto.Name, employeeDto.Status));
         }
         
         [HttpGet("get-all")]
@@ -54,11 +54,11 @@ namespace ReportsWebApi.Controllers
         
         [HttpGet]
         [Route("get-by-id")]
-        public async Task<ActionResult<EmployeeDTO>> GetEmployee(Guid id)
+        public async Task<ActionResult<EmployeeDto>> GetEmployee(Guid id)
         {
             Employee employee = await _employeeService.FindById(id);
             if (employee == null) return NotFound();
-            return new EmployeeDTO()
+            return new EmployeeDto()
             {
                 Name = employee.Name,
                 Chief = employee.Chief,
@@ -74,9 +74,9 @@ namespace ReportsWebApi.Controllers
         }
         
         [HttpPost("add-task/{id}")]
-        public async Task AddTaskToEmployee([FromBody] TaskDTO taskDto)
+        public async Task AddTaskToEmployee([FromBody] TaskDto taskDto)
         {
-            var newTask = new ReportsDomain.Models.Task(taskDto.Title, taskDto.Employee, taskDto.Comment);
+            var newTask = new WorkTask(taskDto.Title, taskDto.Employee, taskDto.Comment);
             await _employeeService.AddTask(newTask.Employee, newTask);
         }
     }

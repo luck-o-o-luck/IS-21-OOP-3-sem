@@ -26,9 +26,9 @@ namespace ReportsWebApi.Controllers
         }
         
         [HttpPost]
-        public async Task PostReport([FromBody] ReportDTO reportDto)
+        public async Task PostReport([FromBody] ReportDto reportDto)
         {
-            var newReport = new Report(reportDto.Writer);
+            var newReport = new Report(reportDto.Writer, reportDto.Tasks);
             await _reportService.Create(newReport);
         }
         
@@ -40,14 +40,14 @@ namespace ReportsWebApi.Controllers
         }
         
         [HttpPost("add-task-to-report/{reportId}")]
-        public async Task PostReportTask(Guid reportId,[FromBody] TaskDTO taskDto)
+        public async Task PostReportTask(Guid reportId,[FromBody] TaskDto taskDto)
         {
-            var task = new ReportsDomain.Models.Task(taskDto.Title, taskDto.Employee, taskDto.Comment);
+            var task = new WorkTask(taskDto.Title, taskDto.Employee, taskDto.Comment);
             await _reportService.AddNewTaskInReport(reportId, task);
         }
         
         [HttpGet("get-tasks-for-a-week")]
-        public async Task<List<ReportsDomain.Models.Task>> GetReportByCurrentWeek()
+        public async Task<List<WorkTask>> GetReportByCurrentWeek()
         {
             return await _reportService.GetTasksForAWeek();
         }
