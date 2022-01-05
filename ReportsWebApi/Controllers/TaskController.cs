@@ -21,38 +21,38 @@ namespace ReportsWebApi.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<List<ReportsDomain.Models.Task>> GetTasks()
+        public async Task<List<ReportsDomain.Models.WorkTask>> GetTasks()
         {
             return await _taskService.GetAllTasks();
         }
 
         [HttpGet("get-id/{id}")]
-        public async Task<ActionResult<ReportsDomain.Models.Task>> GetTask(Guid id)
+        public async Task<ActionResult<WorkTask>> GetTask(Guid id)
         {
-            ReportsDomain.Models.Task task = await _taskService.GetTaskById(id);
+            WorkTask workTask = await _taskService.GetTaskById(id);
 
-            return task;
+            return workTask;
         }
 
         [HttpGet("get-by-date/{date}")]
-        public async Task<ActionResult<ReportsDomain.Models.Task>> GetTask([FromBody] DateTime dateTime)
+        public async Task<ActionResult<WorkTask>> GetTask([FromBody] DateTime dateTime)
         {
-            ReportsDomain.Models.Task task = await _taskService.GetTaskByDate(dateTime);
+            WorkTask workTask = await _taskService.GetTaskByDate(dateTime);
             
-            return task;
+            return workTask;
         }
 
         [HttpGet("get-by-employee/{employeeDto.Id}")]
-        public async Task<ActionResult<ReportsDomain.Models.Task>> GetTask([FromBody] Employee employeeDto)
+        public async Task<ActionResult<WorkTask>> GetTask([FromBody] Employee employeeDto)
         {
             var employee = new Employee(employeeDto.Name, employeeDto.Status);
-            ReportsDomain.Models.Task task = await _taskService.GetTaskByEmployee(employee);
+            WorkTask workTask = await _taskService.GetTaskByEmployee(employee);
             
-            return task;
+            return workTask;
         }
         
         [HttpGet("get-all-unchanged-tasks")]
-        public List<ReportsDomain.Models.Task> GetUnchangedTasks()
+        public List<WorkTask> GetUnchangedTasks()
         {
             return _taskService.GetUnchangedTasks();
         }
@@ -65,9 +65,9 @@ namespace ReportsWebApi.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> PostTask([FromBody] TaskDTO taskDto)
+        public async Task<IActionResult> PostTask([FromBody] TaskDto taskDto)
         {
-            var newTask = new ReportsDomain.Models.Task(taskDto.Title, taskDto.Employee, taskDto.Comment);
+            var newTask = new WorkTask(taskDto.Title, taskDto.Employee, taskDto.Comment);
 
             await _taskService.Create(newTask);
             return Content("Task creates");
