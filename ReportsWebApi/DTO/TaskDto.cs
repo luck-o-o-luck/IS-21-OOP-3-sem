@@ -4,7 +4,7 @@ using ReportsDomain.Models;
 
 namespace ReportsWebApi
 {
-    public class TaskDTO
+    public class TaskDto
     {
         public ReportsDomain.Enums.TaskStatus Status { get; set; }
         public string Title { get; set; }

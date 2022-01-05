@@ -6,10 +6,10 @@ using ReportsDomain.Models;
 
 namespace ReportsWebApi
 {
-    public class ReportDTO
+    public class ReportDto
     {
         public Employee Writer { get; set; }
         public ReportStatus Status { get; set; }
-        public List<ReportsDomain.Models.Task> Tasks { get; set; } = new List<ReportsDomain.Models.Task>();
+        public List<WorkTask> Tasks { get; set; } = new List<ReportsDomain.Models.WorkTask>();
     }
 }

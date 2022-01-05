@@ -5,12 +5,12 @@ using ReportsDomain.Models;
 
 namespace ReportsWebApi
 {
-    public class EmployeeDTO
+    public class EmployeeDto
     {
         public NameEmployee Name { get; set; }
         public EmployeeStatus Status { get; set; }
         public Employee Chief { get; set; }
         public List<Employee> Subordinates { get; set; } = new List<Employee>();
-        public List<ReportsDomain.Models.Task> Tasks { get; set; } = new List<ReportsDomain.Models.Task>();
+        public List<WorkTask> Tasks { get; set; } = new List<WorkTask>();
     }
 }
