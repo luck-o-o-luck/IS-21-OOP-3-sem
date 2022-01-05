@@ -5,12 +5,12 @@ using ReportsDomain.Tools;
 
 namespace ReportsDomain.Models
 {
-    public class Task
+    public class WorkTask
     {
         private List<TaskModification> _taskModifications;
 
-        public Task() {}
-        public Task(string title)
+        public WorkTask() {}
+        public WorkTask(string title)
         {
             if (string.IsNullOrEmpty(title))
                 throw new ReportsException("Title is null");
@@ -21,18 +21,19 @@ namespace ReportsDomain.Models
             Status = Enums.TaskStatus.Open;
             _taskModifications = new List<TaskModification>();
         }
-        public Task(string title, Employee employee, string comment)
+        public WorkTask(string title, Employee employee, string comment)
         {
             if (string.IsNullOrEmpty(title))
-                throw new ReportsException("Title is null");
+                throw new ReportsException("Title is null or empty");
             
             Title = title;
-            Id = Guid.NewGuid();
-            CreationTime = DateTime.Now;
-            Status = Enums.TaskStatus.Open;
-            _taskModifications = new List<TaskModification>();
             Employee = employee;
             Comment = comment;
+            
+            Id = Guid.NewGuid();
+            _taskModifications = new List<TaskModification>();
+            CreationTime = DateTime.Now;
+            Status = TaskStatus.Open;
         }
         
         public Guid Id { get; }
@@ -42,6 +43,7 @@ namespace ReportsDomain.Models
         public DateTime CreationTime { get; }
         public Employee Employee { get; private set; }
         public List<TaskModification> Modifications => _taskModifications;
+        public bool IsTaskForWeek(DateTime start) => CreationTime <= DateTime.Now && CreationTime >= start;
 
         public void SetEmployee(Employee employee)
         {
