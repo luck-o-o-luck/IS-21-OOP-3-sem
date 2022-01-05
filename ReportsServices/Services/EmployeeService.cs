@@ -56,13 +56,13 @@ namespace ReportsServices.Services
 
         public async Task<List<Employee>> GetAllEmployees() => await _context.Employees.ToListAsync();
         
-        public async Task AddTask(Employee employee, ReportsDomain.Models.Task task)
+        public async Task AddTask(Employee employee, WorkTask workTask)
         {
-            employee.AddTask(task);
-            task.SetEmployee(employee);
+            employee.AddTask(workTask);
+            workTask.SetEmployee(employee);
             
             _context.Update(employee);
-            _context.Update(task);
+            _context.Update(workTask);
 
             await _context.SaveChangesAsync();
         }

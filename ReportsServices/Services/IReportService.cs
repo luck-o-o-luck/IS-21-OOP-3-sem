@@ -9,8 +9,8 @@ namespace ReportsServices.Services
     public interface IReportService
     {
         Task Create(Report report);
-        Task<List<ReportsDomain.Models.Task>> GetTasksForAWeek();
-        Task AddNewTaskInReport(Guid reportId, ReportsDomain.Models.Task task);
+        Task<List<WorkTask>> GetTasksForAWeek();
+        Task AddNewTaskInReport(Guid reportId, WorkTask workTask);
         Task Delete(Guid reportId);
         Task<Report> FindReport(Guid reportId);
         Task<IEnumerable<Report>> GetAllReports();

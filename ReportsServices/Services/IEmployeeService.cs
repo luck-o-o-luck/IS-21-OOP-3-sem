@@ -19,7 +19,7 @@ namespace ReportsServices.Services
 
         Task<List<Employee>> GetAllEmployees();
 
-        Task AddTask(Employee employee, ReportsDomain.Models.Task task);
+        Task AddTask(Employee employee, WorkTask workTask);
         Task<Employee> AddChief(Employee employee, Employee chief);
 
         bool Exist(Guid id);

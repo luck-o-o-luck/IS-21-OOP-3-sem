@@ -9,15 +9,15 @@ namespace ReportsServices.Services
 {
     public interface ITaskService
     {
-        Task Create(ReportsDomain.Models.Task task);
+        Task Create(WorkTask workTask);
         Task Delete(Guid id);
-        Task<List<ReportsDomain.Models.Task>> GetAllTasks();
-        Task<ReportsDomain.Models.Task> GetTaskById(Guid id);
-        Task<ReportsDomain.Models.Task> GetTaskByDate(DateTime dateTime);
-        Task<ReportsDomain.Models.Task> GetTaskByEmployee(Employee employee);
-        List<ReportsDomain.Models.Task> GetUnchangedTasks();
-        Task<ReportsDomain.Models.Task> UpdateTaskStatus(Guid id, TaskStatus status);
-        Task<ReportsDomain.Models.Task> SetTaskComment(Guid id, string comment);
+        Task<List<ReportsDomain.Models.WorkTask>> GetAllTasks();
+        Task<ReportsDomain.Models.WorkTask> GetTaskById(Guid id);
+        Task<ReportsDomain.Models.WorkTask> GetTaskByDate(DateTime dateTime);
+        Task<ReportsDomain.Models.WorkTask> GetTaskByEmployee(Employee employee);
+        List<ReportsDomain.Models.WorkTask> GetUnchangedTasks();
+        Task<ReportsDomain.Models.WorkTask> UpdateTaskStatus(Guid id, TaskStatus status);
+        Task<ReportsDomain.Models.WorkTask> SetTaskComment(Guid id, string comment);
         public IReadOnlyList<TaskModification> GetModificationsOfTask(Guid id);
         bool Exists(Guid id);
     }

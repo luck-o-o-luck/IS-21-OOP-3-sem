@@ -18,28 +18,28 @@ namespace ReportsServices.Services
 
         public TaskService(ReportsDbContext reportsDbContext) => _context = reportsDbContext;
 
-        public async Task Create(ReportsDomain.Models.Task task)
+        public async Task Create(WorkTask workTask)
         {
-            if (Exists(task.Id))
+            if (Exists(workTask.Id))
                 throw new ReportsException("Task already exists");
             
-            _context.Tasks.Add(task);
+            _context.Tasks.Add(workTask);
             await _context.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
         {
-            ReportsDomain.Models.Task task = await _context.Tasks.FindAsync(id);
+            WorkTask workTask = await _context.Tasks.FindAsync(id);
 
-            if (task is null)
+            if (workTask is null)
                 throw new ReportsException("Task doesn't exist");
             
-            _context.Tasks.Remove(task);
-            _context.Update(task);
+            _context.Tasks.Remove(workTask);
+            _context.Update(workTask);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ReportsDomain.Models.Task>> GetAllTasks() => await _context.Tasks.ToListAsync();
+        public async Task<List<WorkTask>> GetAllTasks() => await _context.Tasks.ToListAsync();
 
         public IReadOnlyList<TaskModification> GetModificationsOfTask(Guid id)
         {
@@ -48,30 +48,30 @@ namespace ReportsServices.Services
             return selectedTask;
         }
 
-        public async Task<ReportsDomain.Models.Task> GetTaskById(Guid id)
+        public async Task<WorkTask> GetTaskById(Guid id)
         {
-            ReportsDomain.Models.Task task = await _context.Tasks.FindAsync(id);
+            WorkTask workTask = await _context.Tasks.FindAsync(id);
 
-            return task;
+            return workTask;
         }
 
-        public async Task<ReportsDomain.Models.Task> GetTaskByDate(DateTime dateTime)
+        public async Task<WorkTask> GetTaskByDate(DateTime dateTime)
         {
-            ReportsDomain.Models.Task selectedTask =
+            WorkTask selectedWorkTask =
                await _context.Tasks.FirstOrDefaultAsync(task => task.CreationTime == dateTime);
 
-            return selectedTask;
+            return selectedWorkTask;
         }
 
-        public async Task<ReportsDomain.Models.Task> GetTaskByEmployee(Employee employee)
+        public async Task<WorkTask> GetTaskByEmployee(Employee employee)
         {
-            ReportsDomain.Models.Task selectedTask =
+            WorkTask selectedWorkTask =
                 await _context.Tasks.FirstOrDefaultAsync(task => task.Employee == employee);
 
-            return selectedTask;
+            return selectedWorkTask;
         }
 
-        public List<ReportsDomain.Models.Task> GetUnchangedTasks()
+        public List<WorkTask> GetUnchangedTasks()
         {
            var selectedTasks = 
                _context.Tasks.Where(task => task.Modifications.Count == 0).ToList();
@@ -79,33 +79,33 @@ namespace ReportsServices.Services
             return selectedTasks;
         }
 
-        public async Task<ReportsDomain.Models.Task> UpdateTaskStatus(Guid id, TaskStatus status)
+        public async Task<WorkTask> UpdateTaskStatus(Guid id, TaskStatus status)
         {
-            ReportsDomain.Models.Task task = await _context.Tasks.FindAsync(id);
+            WorkTask workTask = await _context.Tasks.FindAsync(id);
             
-            if (task is null)
+            if (workTask is null)
                 throw new ReportsException("Task doesn't exist");
             
-            task.SetStatus(status);
-            _context.Update(task);
+            workTask.SetStatus(status);
+            _context.Update(workTask);
             await _context.SaveChangesAsync();
 
-            return task;
+            return workTask;
         }
 
-        public async Task<ReportsDomain.Models.Task> SetTaskComment(Guid id, string comment)
+        public async Task<WorkTask> SetTaskComment(Guid id, string comment)
         {
-            ReportsDomain.Models.Task task = await _context.Tasks.FindAsync(id);
+            WorkTask workTask = await _context.Tasks.FindAsync(id);
             
-            if (task is null)
+            if (workTask is null)
                 throw new ReportsException("Task doesn't exist");
             
-            task.SetComment(comment);
-            _context.Update(task);
+            workTask.SetComment(comment);
+            _context.Update(workTask);
             
             await _context.SaveChangesAsync();
 
-            return task;
+            return workTask;
         }
 
         public bool Exists(Guid id) => _context.Tasks.Any(task => task.Id == id);
