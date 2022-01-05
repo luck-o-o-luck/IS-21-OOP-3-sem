@@ -33,7 +33,7 @@ namespace ReportsDomain.Models
             Id = Guid.NewGuid();
             _taskModifications = new List<TaskModification>();
             CreationTime = DateTime.Now;
-            Status = TaskStatus.Open;
+            Status = Enums.TaskStatus.Open;
         }
         
         public Guid Id { get; }
