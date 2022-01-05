@@ -7,14 +7,14 @@ namespace ReportsDomain.Models
     public class TaskModification
     {
         public TaskModification() {}
-        public TaskModification(Task task, TaskModificationStatus status)
+        public TaskModification(WorkTask workTask, TaskModificationStatus status)
         {
-            Task = task ?? throw new ReportsException("Task is null");
+            WorkTask = workTask ?? throw new ReportsException("Task is null");
             Status = status;
-            TimeOfChange = DateTime.Now;
+            UpdateTime = DateTime.Now;
         }
-        public Task Task { get; }
+        public WorkTask WorkTask { get; }
         public TaskModificationStatus Status { get; }
-        public DateTime TimeOfChange { get; }
+        public DateTime UpdateTime { get; }
     }
 }
