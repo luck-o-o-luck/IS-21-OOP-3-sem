@@ -32,7 +32,7 @@ namespace ReportsServices.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ReportsDomain.Models.Task>> GetTasksForAWeek()
+        public async Task<List<WorkTask>> GetTasksForAWeek()
         {
             DateTime start = DateTime.Now;
             while (start.DayOfWeek != DayOfWeek.Monday)
@@ -41,15 +41,15 @@ namespace ReportsServices.Services
             }
             
             var selectedTasks =
-                _context.Tasks.Where(task => task.CreationTime <= DateTime.Now && task.CreationTime >= start).ToList();
+                _context.Tasks.Where(task => task.IsTaskForWeek(start)).ToList();
 
             return await Task.FromResult(selectedTasks);
         }
 
-        public async Task AddNewTaskInReport(Guid reportId, ReportsDomain.Models.Task task)
+        public async Task AddNewTaskInReport(Guid reportId, WorkTask workTask)
         {
             Report report = FindReport(reportId).Result;
-            report.AddTask(task);
+            report.AddTask(workTask);
 
             _context.Update(report);
             await _context.SaveChangesAsync();
